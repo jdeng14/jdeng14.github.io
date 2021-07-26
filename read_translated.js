@@ -49,7 +49,7 @@ async function listAllMessages() {
 }
 
 
-function translateSingleMessage() {
+async function translateSingleMessage() {
     let defaultClient = LiltNode.ApiClient.instance;
     // Configure API key authorization: ApiKeyAuth
     let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
@@ -62,26 +62,28 @@ function translateSingleMessage() {
     BasicAuth.password = "2b6d066afe38cf67ff04e0c0f6c2b674";
 
     let apiInstance = new LiltNode.TranslateApi();
-    let source = "I ran to the store"; // String | A source string to be registered.
     let srclang = "en"; // String | An ISO 639-1 language code.
     let trglang = "es"; // String | An ISO 639-1 language code.
     let memoryId = 60312; // Number | A unique Memory identifier.
 
-    apiInstance.registerSegment(source, srclang, trglang).then((registerData) => {
-        let opts = {
-            'source': source, // String | The source text to be translated.
-            'sourceHash': registerData.source_hash, // Number | A source hash code.
-            };
-        apiInstance.translateSegment(memoryId, opts).then((translateData) => {
-            // console.log('API called successfully. Returned data: ' + data);
-            console.log(translateData);
-            document.getElementById("translatedText").innerHTML = translateData.translation[0].targetWithTags;
+    messages = listAllMessages();
+    for (const message in messages) {
+        apiInstance.registerSegment(message, srclang, trglang).then((registerData) => {
+            let opts = {
+                'source': message, // String | The source text to be translated.
+                'sourceHash': registerData.source_hash, // Number | A source hash code.
+                };
+            apiInstance.translateSegment(memoryId, opts).then((translateData) => {
+                // console.log('API called successfully. Returned data: ' + data);
+                console.log(translateData);
+                document.getElementById("translatedText").innerHTML = translateData.translation[0].targetWithTags;
+            }, (error) => {
+                console.error(error);
+            });
         }, (error) => {
             console.error(error);
         });
-    }, (error) => {
-        console.error(error);
-    });
+    }
 }
 
-translateSingleMessage();
+// translateSingleMessage();
