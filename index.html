@@ -1,31 +1,29 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="index.css" />
-    <script type="text/javascript" src="//dl.frontapp.com/libs/plugin-sdk-1.0.1.min.js"></script>
+    <script type="text/javascript" src="API_bundle.js"></script>
   </head>
   <body>
     <div class="plugin-div">
         <div class="header">
-            <img src="images/Lilt Logo.png" alt="Lilt">
+            <img src="images/logo-white.svg" alt="Lilt">
         </div>
         <div class="container">
             <div class="center">
-                <button id="readButton" class="button" >Read Translated Message</button>
+                <p class="APIInputText">Enter API Key: </p>
+                <input name="APIKeyInput" type="text" maxlength="512" id="APIKeyInput" class="APIKeyInput"/><br>
+                <input type="button" id="APIKeySubmit" value="Submit" class="button"><br>
                 <script type="text/javascript">
-                    document.getElementById("readButton").onclick = function () {
-                        location.href = "read.html";
-                    };
+                    var submitButton = document.getElementById('APIKeySubmit'); 
+                    submitButton.onclick = function(){
+                        var script = document.createElement("script");
+                        script.type = "text/javascript";
+                        script.src = "API_bundle.js"; 
+                        document.getElementsByTagName("head")[0].appendChild(script);
+                        return false;
+                    }
                 </script>
-            </div>
-        </div>
-        <div class="container">
-            <div class="center">
-                <button id="sendButton" class="button" >Send Translated Message</button>
-                <script type="text/javascript">
-                    document.getElementById("sendButton").onclick = function () {
-                        location.href = "send.html";
-                    };
-                </script>
+                <p id="errorMessage"></p>
             </div>
         </div>
     </div>

@@ -2,7 +2,6 @@
 
 var Front = require('@frontapp/plugin-sdk');
 var LiltNode = require('lilt-node')
-require('dotenv').config();
 
 Front.contextUpdates.subscribe(context => {
     switch(context.type) {
@@ -23,67 +22,66 @@ Front.contextUpdates.subscribe(context => {
   });
 
 
-async function listAllMessages() {
-    const source = buildCancelTokenSource();
-    // Do not wait more than 500ms for the list of messages.
-    setTimeout(() => source.cancel(), 500);
-    try {
-        const list = await Front.listMessages(undefined, source.token);
+// async function listAllMessages() {
+//     const source = buildCancelTokenSource();
+//     // Do not wait more than 500ms for the list of messages.
+//     setTimeout(() => source.cancel(), 500);
+//     try {
+//         const list = await Front.listMessages(undefined, source.token);
 
-        let nextPageToken = list.token
-        const messages = list.results;
+//         let nextPageToken = list.token
+//         const messages = list.results;
+//         for (const message in messages) {
+//             console.log(message);
+//         }
 
-        while (nextPageToken) {
-            const {results, token} = await listMessages(nextPageToken);
-            nextPageToken = token;
-            messages.push(...results);
-        }
+//         while (nextPageToken) {
+//             const {results, token} = await listMessages(nextPageToken);
+//             nextPageToken = token;
+//             messages.push(...results);
+//         }
 
-        return messages;
-    } catch (error) {
-        if (isCancelError(error)) {
-            return; // Do nothing.
-        }
-        throw error;
-    }
-}
+//         return messages;
+//     } catch (error) {
+//         if (isCancelError(error)) {
+//             return; // Do nothing.
+//         }
+//         throw error;
+//     }
+// }
 
-
-async function translateSingleMessage() {
+async function translateAllMessages(messages, srclang, trglang, memoryId) {
     let defaultClient = LiltNode.ApiClient.instance;
     // Configure API key authorization: ApiKeyAuth
     let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
-    ApiKeyAuth.apiKey = "2b6d066afe38cf67ff04e0c0f6c2b674";
-    //ApiKeyAuth.apiKey = process.env.API_KEY; Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+    // let APIKey = window.sessionStorage.getItem("APIKEY");
+    let APIKey = "2b6d066afe38cf67ff04e0c0f6c2b674";
+    ApiKeyAuth.apiKey = APIKey;
+    // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
     // ApiKeyAuth.apiKeyPrefix = 'Token';
     // Configure HTTP basic authorization: BasicAuth
     let BasicAuth = defaultClient.authentications['BasicAuth'];
-    BasicAuth.username = "2b6d066afe38cf67ff04e0c0f6c2b674";
-    BasicAuth.password = "2b6d066afe38cf67ff04e0c0f6c2b674";
+    BasicAuth.username = APIKey;
+    BasicAuth.password = APIKey;
 
     let apiInstance = new LiltNode.TranslateApi();
-    let srclang = "en"; // String | An ISO 639-1 language code.
-    let trglang = "es"; // String | An ISO 639-1 language code.
-    let memoryId = 60312; // Number | A unique Memory identifier.
 
-    messages = listAllMessages();
-    for (const message in messages) {
-        apiInstance.registerSegment(message, srclang, trglang).then((registerData) => {
-            let opts = {
-                'source': message, // String | The source text to be translated.
-                'sourceHash': registerData.source_hash, // Number | A source hash code.
-                };
-            apiInstance.translateSegment(memoryId, opts).then((translateData) => {
-                // console.log('API called successfully. Returned data: ' + data);
-                console.log(translateData);
-                document.getElementById("translatedText").innerHTML = translateData.translation[0].targetWithTags;
-            }, (error) => {
-                console.error(error);
-            });
-        }, (error) => {
-            console.error(error);
-        });
+    let translatedMessages = []
+    for (let index = 0; index < messages.length; index++) {
+        let translated = await translateSingle(apiInstance, messages[index], srclang, trglang, memoryId);
+        translatedMessages.push(translated);
     }
+    return translatedMessages;
 }
 
-// translateSingleMessage();
+async function translateSingle(apiInstance, message, srclang, trglang, memoryId) {
+    let registerData = await apiInstance.registerSegment(message, srclang, trglang);
+    let opts = {
+        'source': message, // String | The source text to be translated.
+        'sourceHash': registerData.source_hash, // Number | A source hash code.
+        };
+    let translateData = await apiInstance.translateSegment(memoryId, opts);
+    let translatedMessage = translateData.translation[0].targetWithTags;
+    console.log(translatedMessage);
+    return translatedMessage;
+}

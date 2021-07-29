@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <script type="text/javascript" src="//dl.frontapp.com/libs/plugin-sdk-1.0.1.min.js"></script>
+  </head>
+  <body>
+    <div class="plugin-div">
+        <div class="header">
+            <img src="images/logo-white.svg" alt="Lilt">
+        </div>
+        <div class="container">
+            <div class="center">
+                <button id="readButton" class="button" >Read Translated Message</button>
+                <script type="text/javascript">
+                    document.getElementById("readButton").onclick = function () {
+                        location.href = "read.html";
+                    };
+                </script>
+            </div>
+        </div>
+        <div class="container">
+            <div class="center">
+                <button id="sendButton" class="button" >Send Translated Message</button>
+                <script type="text/javascript">
+                    document.getElementById("sendButton").onclick = function () {
+                        location.href = "send.html";
+                    };
+                </script>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
