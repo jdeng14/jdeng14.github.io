@@ -24002,7 +24002,7 @@ Front.contextUpdates.subscribe(context => {
         console.log('No conversation selected');
         break;
       case 'singleConversation':
-        // console.log(listAllMessages());
+        console.log(listAllMessages());
         console.log("Single Conversation");
         break;
       case 'multiConversations':
@@ -24015,33 +24015,29 @@ Front.contextUpdates.subscribe(context => {
   });
 
 
-// async function listAllMessages() {
-//     const source = buildCancelTokenSource();
-//     // Do not wait more than 500ms for the list of messages.
-//     setTimeout(() => source.cancel(), 500);
-//     try {
-//         const list = await Front.listMessages(undefined, source.token);
+async function listAllMessages() {
+    const source = Front.buildCancelTokenSource();
+    // Do not wait more than 500ms for the list of messages.
+    setTimeout(() => source.cancel(), 500);
+    try {
+        const list = await Front.listMessages(undefined, source.token);
 
-//         let nextPageToken = list.token
-//         const messages = list.results;
-//         for (const message in messages) {
-//             console.log(message);
-//         }
+        let nextPageToken = list.token
+        const messages = list.results;
 
-//         while (nextPageToken) {
-//             const {results, token} = await listMessages(nextPageToken);
-//             nextPageToken = token;
-//             messages.push(...results);
-//         }
-
-//         return messages;
-//     } catch (error) {
-//         if (isCancelError(error)) {
-//             return; // Do nothing.
-//         }
-//         throw error;
-//     }
-// }
+        while (nextPageToken) {
+            const {results, token} = await listMessages(nextPageToken);
+            nextPageToken = token;
+            messages.push(...results);
+        }
+        return messages;
+    } catch (error) {
+        if (isCancelError(error)) {
+            return; // Do nothing.
+        }
+        throw error;
+    }
+}
 
 async function translateAllMessages(messages, srclang, trglang, memoryId) {
     let defaultClient = LiltNode.ApiClient.instance;

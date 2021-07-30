@@ -3,7 +3,6 @@
         <link rel="stylesheet" type="text/css" href="index.css" />
         <!-- <script type="text/javascript" src="//dl.frontapp.com/libs/plugin-sdk-1.0.1.min.js"></script> -->
         <script type="text/javascript" src="read_bundle.js"></script>
-        <script type="text/javascript" src="config.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </head>
     <body>
@@ -12,10 +11,12 @@
                 <p id="translatedText">Potatoes</p>
             </div>
         </div>
-        <script type="text/javascript" src="test.js">
-            window.onload = function() {
-                testPrint();
-            };
+        <script type="text/javascript">
+            $("#translatedText").load(async function() {
+                const text = await 
+                $(this).html()
+            }
+            );
         </script>
     </body>
 </html>
