@@ -10,8 +10,23 @@ Front.contextUpdates.subscribe(context => {
         break;
       case 'singleConversation':
         console.log("Single Conversation");
-        Front.listMessages(undefined, source.token);
-        // listAllMessages();
+        const source = Front.buildCancelTokenSource();
+        // Do not wait more than 500ms for the list of messages.
+        setTimeout(() => source.cancel(), 500);
+        try {
+            Front.listMessages(undefined, source.token).then((list) => {
+                let nextPageToken = list.token
+                const messages = list.results;
+                for (let index = 0; index < messages.length; index++) {
+                    console.log(messages[index]);
+                }
+            });
+        } catch (error) {
+            if (Front.isCancelError(error)) {
+                return; // Do nothing.
+            }
+            throw error;
+        }
         break;
       case 'multiConversations':
         console.log('Multiple conversations selected', context.conversations);
