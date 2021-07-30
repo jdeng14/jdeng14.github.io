@@ -9,8 +9,8 @@ Front.contextUpdates.subscribe(context => {
         console.log('No conversation selected');
         break;
       case 'singleConversation':
-        console.log(await listAllMessages());
         console.log("Single Conversation");
+        listAllMessages();
         break;
       case 'multiConversations':
         console.log('Multiple conversations selected', context.conversations);
@@ -36,6 +36,10 @@ async function listAllMessages() {
             const {results, token} = await listMessages(nextPageToken);
             nextPageToken = token;
             messages.push(...results);
+        }
+
+        for (let index = 0; index < messages.length; index++) {
+            console.log(messages[index]);
         }
         return messages;
     } catch (error) {

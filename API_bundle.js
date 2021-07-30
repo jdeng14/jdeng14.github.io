@@ -176,128 +176,6 @@ Emitter.prototype.hasListeners = function(event){
 };
 
 },{}],2:[function(require,module,exports){
-(function (process){(function (){
-/* @flow */
-/*::
-
-type DotenvParseOptions = {
-  debug?: boolean
-}
-
-// keys and values from src
-type DotenvParseOutput = { [string]: string }
-
-type DotenvConfigOptions = {
-  path?: string, // path to .env file
-  encoding?: string, // encoding of .env file
-  debug?: string // turn on logging for debugging purposes
-}
-
-type DotenvConfigOutput = {
-  parsed?: DotenvParseOutput,
-  error?: Error
-}
-
-*/
-
-const fs = require('fs')
-const path = require('path')
-const os = require('os')
-
-function log (message /*: string */) {
-  console.log(`[dotenv][DEBUG] ${message}`)
-}
-
-const NEWLINE = '\n'
-const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/
-const RE_NEWLINES = /\\n/g
-const NEWLINES_MATCH = /\r\n|\n|\r/
-
-// Parses src into an Object
-function parse (src /*: string | Buffer */, options /*: ?DotenvParseOptions */) /*: DotenvParseOutput */ {
-  const debug = Boolean(options && options.debug)
-  const obj = {}
-
-  // convert Buffers before splitting into lines and processing
-  src.toString().split(NEWLINES_MATCH).forEach(function (line, idx) {
-    // matching "KEY' and 'VAL' in 'KEY=VAL'
-    const keyValueArr = line.match(RE_INI_KEY_VAL)
-    // matched?
-    if (keyValueArr != null) {
-      const key = keyValueArr[1]
-      // default undefined or missing values to empty string
-      let val = (keyValueArr[2] || '')
-      const end = val.length - 1
-      const isDoubleQuoted = val[0] === '"' && val[end] === '"'
-      const isSingleQuoted = val[0] === "'" && val[end] === "'"
-
-      // if single or double quoted, remove quotes
-      if (isSingleQuoted || isDoubleQuoted) {
-        val = val.substring(1, end)
-
-        // if double quoted, expand newlines
-        if (isDoubleQuoted) {
-          val = val.replace(RE_NEWLINES, NEWLINE)
-        }
-      } else {
-        // remove surrounding whitespace
-        val = val.trim()
-      }
-
-      obj[key] = val
-    } else if (debug) {
-      log(`did not match key and value when parsing line ${idx + 1}: ${line}`)
-    }
-  })
-
-  return obj
-}
-
-function resolveHome (envPath) {
-  return envPath[0] === '~' ? path.join(os.homedir(), envPath.slice(1)) : envPath
-}
-
-// Populates process.env from .env file
-function config (options /*: ?DotenvConfigOptions */) /*: DotenvConfigOutput */ {
-  let dotenvPath = path.resolve(process.cwd(), '.env')
-  let encoding /*: string */ = 'utf8'
-  let debug = false
-
-  if (options) {
-    if (options.path != null) {
-      dotenvPath = resolveHome(options.path)
-    }
-    if (options.encoding != null) {
-      encoding = options.encoding
-    }
-    if (options.debug != null) {
-      debug = true
-    }
-  }
-
-  try {
-    // specifying an encoding returns a string instead of a buffer
-    const parsed = parse(fs.readFileSync(dotenvPath, { encoding }), { debug })
-
-    Object.keys(parsed).forEach(function (key) {
-      if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
-        process.env[key] = parsed[key]
-      } else if (debug) {
-        log(`"${key}" is already defined in \`process.env\` and will not be overwritten`)
-      }
-    })
-
-    return { parsed }
-  } catch (e) {
-    return { error: e }
-  }
-}
-
-module.exports.config = config
-module.exports.parse = parse
-
-}).call(this)}).call(this,require('_process'))
-},{"_process":92,"fs":85,"os":90,"path":91}],3:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 
@@ -1030,7 +908,7 @@ ApiClient.instance = new ApiClient();
 var _default = ApiClient;
 exports["default"] = _default;
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"buffer":88,"fs":87,"querystring":95,"superagent":78}],4:[function(require,module,exports){
+},{"buffer":86,"fs":85,"querystring":90,"superagent":77}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1243,7 +1121,7 @@ var ConnectorsApi = /*#__PURE__*/function () {
 }();
 
 exports["default"] = ConnectorsApi;
-},{"../ApiClient":3,"../model/Connector":19,"../model/ConnectorArguments":20,"../model/ConnectorDeleteResponse":21,"../model/Error":35}],5:[function(require,module,exports){
+},{"../ApiClient":2,"../model/Connector":18,"../model/ConnectorArguments":19,"../model/ConnectorDeleteResponse":20,"../model/Error":34}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1685,7 +1563,7 @@ var DocumentsApi = /*#__PURE__*/function () {
 }();
 
 exports["default"] = DocumentsApi;
-},{"../ApiClient":3,"../model/DocumentAssignmentParameters":22,"../model/DocumentAssignmentResponse":23,"../model/DocumentDeleteResponse":24,"../model/DocumentParameters":25,"../model/DocumentPretranslateParameters":26,"../model/DocumentPretranslateResponse":27,"../model/DocumentUpdateParameters":31,"../model/DocumentWithSegments":32,"../model/Error":35}],6:[function(require,module,exports){
+},{"../ApiClient":2,"../model/DocumentAssignmentParameters":21,"../model/DocumentAssignmentResponse":22,"../model/DocumentDeleteResponse":23,"../model/DocumentParameters":24,"../model/DocumentPretranslateParameters":25,"../model/DocumentPretranslateResponse":26,"../model/DocumentUpdateParameters":30,"../model/DocumentWithSegments":31,"../model/Error":34}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1875,7 +1753,7 @@ var FilesApi = /*#__PURE__*/function () {
 }();
 
 exports["default"] = FilesApi;
-},{"../ApiClient":3,"../model/Error":35,"../model/FileDeleteResponse":37}],7:[function(require,module,exports){
+},{"../ApiClient":2,"../model/Error":34,"../model/FileDeleteResponse":36}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1955,7 +1833,7 @@ var LanguagesApi = /*#__PURE__*/function () {
 }();
 
 exports["default"] = LanguagesApi;
-},{"../ApiClient":3,"../model/Error":35,"../model/LanguagesResponse":38}],8:[function(require,module,exports){
+},{"../ApiClient":2,"../model/Error":34,"../model/LanguagesResponse":37}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2118,7 +1996,7 @@ var LexiconApi = /*#__PURE__*/function () {
 }();
 
 exports["default"] = LexiconApi;
-},{"../ApiClient":3,"../model/Error":35,"../model/LexiconEntry":39,"../model/LexiconUpdateParameters":44,"../model/LexiconUpdateResponse":45}],9:[function(require,module,exports){
+},{"../ApiClient":2,"../model/Error":34,"../model/LexiconEntry":38,"../model/LexiconUpdateParameters":43,"../model/LexiconUpdateResponse":44}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2678,7 +2556,7 @@ var MemoriesApi = /*#__PURE__*/function () {
 }();
 
 exports["default"] = MemoriesApi;
-},{"../ApiClient":3,"../model/Error":35,"../model/Memory":47,"../model/MemoryCreateParameters":48,"../model/MemoryDeleteResponse":49,"../model/MemoryImportResponse":50,"../model/MemoryInsertResponse":51,"../model/MemoryUpdateParameters":52,"../model/MemoryUpdateResponse":53,"../model/TranslationMemoryEntry":77}],10:[function(require,module,exports){
+},{"../ApiClient":2,"../model/Error":34,"../model/Memory":46,"../model/MemoryCreateParameters":47,"../model/MemoryDeleteResponse":48,"../model/MemoryImportResponse":49,"../model/MemoryInsertResponse":50,"../model/MemoryUpdateParameters":51,"../model/MemoryUpdateResponse":52,"../model/TranslationMemoryEntry":76}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3000,7 +2878,7 @@ var ProjectsApi = /*#__PURE__*/function () {
 }();
 
 exports["default"] = ProjectsApi;
-},{"../ApiClient":3,"../model/Error":35,"../model/Project":54,"../model/ProjectCreateParameters":55,"../model/ProjectDeleteResponse":56,"../model/ProjectQuote":57,"../model/ProjectStatus":58,"../model/ProjectUpdateResponse":59}],11:[function(require,module,exports){
+},{"../ApiClient":2,"../model/Error":34,"../model/Project":53,"../model/ProjectCreateParameters":54,"../model/ProjectDeleteResponse":55,"../model/ProjectQuote":56,"../model/ProjectStatus":57,"../model/ProjectUpdateResponse":58}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3106,7 +2984,7 @@ var QAApi = /*#__PURE__*/function () {
 }();
 
 exports["default"] = QAApi;
-},{"../ApiClient":3,"../model/Error":35,"../model/QARuleMatches":60}],12:[function(require,module,exports){
+},{"../ApiClient":2,"../model/Error":34,"../model/QARuleMatches":59}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3186,7 +3064,7 @@ var RootApi = /*#__PURE__*/function () {
 }();
 
 exports["default"] = RootApi;
-},{"../ApiClient":3,"../model/ApiRoot":17,"../model/Error":35}],13:[function(require,module,exports){
+},{"../ApiClient":2,"../model/ApiRoot":16,"../model/Error":34}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3471,7 +3349,7 @@ var SegmentsApi = /*#__PURE__*/function () {
 }();
 
 exports["default"] = SegmentsApi;
-},{"../ApiClient":3,"../model/Error":35,"../model/Segment":68,"../model/SegmentCreateParameters":69,"../model/SegmentDeleteResponse":70,"../model/SegmentUpdateParameters":71,"../model/SegmentWithComments":72,"../model/TaggedSegment":73}],14:[function(require,module,exports){
+},{"../ApiClient":2,"../model/Error":34,"../model/Segment":67,"../model/SegmentCreateParameters":68,"../model/SegmentDeleteResponse":69,"../model/SegmentUpdateParameters":70,"../model/SegmentWithComments":71,"../model/TaggedSegment":72}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3644,7 +3522,7 @@ var TranslateApi = /*#__PURE__*/function () {
 }();
 
 exports["default"] = TranslateApi;
-},{"../ApiClient":3,"../model/Error":35,"../model/TranslateRegisterResponse":74,"../model/TranslationList":76}],15:[function(require,module,exports){
+},{"../ApiClient":2,"../model/Error":34,"../model/TranslateRegisterResponse":73,"../model/TranslationList":75}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4244,7 +4122,7 @@ var _SegmentsApi = _interopRequireDefault(require("./api/SegmentsApi"));
 var _TranslateApi = _interopRequireDefault(require("./api/TranslateApi"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-},{"./ApiClient":3,"./api/ConnectorsApi":4,"./api/DocumentsApi":5,"./api/FilesApi":6,"./api/LanguagesApi":7,"./api/LexiconApi":8,"./api/MemoriesApi":9,"./api/ProjectsApi":10,"./api/QAApi":11,"./api/RootApi":12,"./api/SegmentsApi":13,"./api/TranslateApi":14,"./model/Annotation":16,"./model/ApiRoot":17,"./model/Comment":18,"./model/Connector":19,"./model/ConnectorArguments":20,"./model/ConnectorDeleteResponse":21,"./model/DocumentAssignmentParameters":22,"./model/DocumentAssignmentResponse":23,"./model/DocumentDeleteResponse":24,"./model/DocumentParameters":25,"./model/DocumentPretranslateParameters":26,"./model/DocumentPretranslateResponse":27,"./model/DocumentPretranslating":28,"./model/DocumentPretranslatingStatus":29,"./model/DocumentQuote":30,"./model/DocumentUpdateParameters":31,"./model/DocumentWithSegments":32,"./model/DocumentWithoutSegments":33,"./model/DocumentWithoutSegmentsStatus":34,"./model/Error":35,"./model/File":36,"./model/FileDeleteResponse":37,"./model/LanguagesResponse":38,"./model/LexiconEntry":39,"./model/LexiconEntryExamples":40,"./model/LexiconEntrySourceSpan":41,"./model/LexiconEntryTargetSpan":42,"./model/LexiconEntryTranslations":43,"./model/LexiconUpdateParameters":44,"./model/LexiconUpdateResponse":45,"./model/MatchBand":46,"./model/Memory":47,"./model/MemoryCreateParameters":48,"./model/MemoryDeleteResponse":49,"./model/MemoryImportResponse":50,"./model/MemoryInsertResponse":51,"./model/MemoryUpdateParameters":52,"./model/MemoryUpdateResponse":53,"./model/Project":54,"./model/ProjectCreateParameters":55,"./model/ProjectDeleteResponse":56,"./model/ProjectQuote":57,"./model/ProjectStatus":58,"./model/ProjectUpdateResponse":59,"./model/QARuleMatches":60,"./model/QARuleMatchesContext":61,"./model/QARuleMatchesMatches":62,"./model/QARuleMatchesReplacements":63,"./model/QARuleMatchesRule":64,"./model/QARuleMatchesRuleCategory":65,"./model/QARuleMatchesRuleUrls":66,"./model/ResourceStatus":67,"./model/Segment":68,"./model/SegmentCreateParameters":69,"./model/SegmentDeleteResponse":70,"./model/SegmentUpdateParameters":71,"./model/SegmentWithComments":72,"./model/TaggedSegment":73,"./model/TranslateRegisterResponse":74,"./model/Translation":75,"./model/TranslationList":76,"./model/TranslationMemoryEntry":77}],16:[function(require,module,exports){
+},{"./ApiClient":2,"./api/ConnectorsApi":3,"./api/DocumentsApi":4,"./api/FilesApi":5,"./api/LanguagesApi":6,"./api/LexiconApi":7,"./api/MemoriesApi":8,"./api/ProjectsApi":9,"./api/QAApi":10,"./api/RootApi":11,"./api/SegmentsApi":12,"./api/TranslateApi":13,"./model/Annotation":15,"./model/ApiRoot":16,"./model/Comment":17,"./model/Connector":18,"./model/ConnectorArguments":19,"./model/ConnectorDeleteResponse":20,"./model/DocumentAssignmentParameters":21,"./model/DocumentAssignmentResponse":22,"./model/DocumentDeleteResponse":23,"./model/DocumentParameters":24,"./model/DocumentPretranslateParameters":25,"./model/DocumentPretranslateResponse":26,"./model/DocumentPretranslating":27,"./model/DocumentPretranslatingStatus":28,"./model/DocumentQuote":29,"./model/DocumentUpdateParameters":30,"./model/DocumentWithSegments":31,"./model/DocumentWithoutSegments":32,"./model/DocumentWithoutSegmentsStatus":33,"./model/Error":34,"./model/File":35,"./model/FileDeleteResponse":36,"./model/LanguagesResponse":37,"./model/LexiconEntry":38,"./model/LexiconEntryExamples":39,"./model/LexiconEntrySourceSpan":40,"./model/LexiconEntryTargetSpan":41,"./model/LexiconEntryTranslations":42,"./model/LexiconUpdateParameters":43,"./model/LexiconUpdateResponse":44,"./model/MatchBand":45,"./model/Memory":46,"./model/MemoryCreateParameters":47,"./model/MemoryDeleteResponse":48,"./model/MemoryImportResponse":49,"./model/MemoryInsertResponse":50,"./model/MemoryUpdateParameters":51,"./model/MemoryUpdateResponse":52,"./model/Project":53,"./model/ProjectCreateParameters":54,"./model/ProjectDeleteResponse":55,"./model/ProjectQuote":56,"./model/ProjectStatus":57,"./model/ProjectUpdateResponse":58,"./model/QARuleMatches":59,"./model/QARuleMatchesContext":60,"./model/QARuleMatchesMatches":61,"./model/QARuleMatchesReplacements":62,"./model/QARuleMatchesRule":63,"./model/QARuleMatchesRuleCategory":64,"./model/QARuleMatchesRuleUrls":65,"./model/ResourceStatus":66,"./model/Segment":67,"./model/SegmentCreateParameters":68,"./model/SegmentDeleteResponse":69,"./model/SegmentUpdateParameters":70,"./model/SegmentWithComments":71,"./model/TaggedSegment":72,"./model/TranslateRegisterResponse":73,"./model/Translation":74,"./model/TranslationList":75,"./model/TranslationMemoryEntry":76}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4322,7 +4200,7 @@ var Annotation = /*#__PURE__*/function () {
 Annotation.prototype['text'] = undefined;
 var _default = Annotation;
 exports["default"] = _default;
-},{"../ApiClient":3}],17:[function(require,module,exports){
+},{"../ApiClient":2}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4407,7 +4285,7 @@ ApiRoot.prototype['api_name'] = undefined;
 ApiRoot.prototype['api_root'] = undefined;
 var _default = ApiRoot;
 exports["default"] = _default;
-},{"../ApiClient":3}],18:[function(require,module,exports){
+},{"../ApiClient":2}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4537,7 +4415,7 @@ Comment.prototype['annotations'] = undefined;
 Comment.prototype['created_at'] = undefined;
 var _default = Comment;
 exports["default"] = _default;
-},{"../ApiClient":3,"./Annotation":16}],19:[function(require,module,exports){
+},{"../ApiClient":2,"./Annotation":15}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4634,7 +4512,7 @@ Connector.prototype['args'] = undefined;
 Connector.prototype['schedule'] = undefined;
 var _default = Connector;
 exports["default"] = _default;
-},{"../ApiClient":3}],20:[function(require,module,exports){
+},{"../ApiClient":2}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4741,7 +4619,7 @@ ConnectorArguments.prototype['args'] = undefined;
 ConnectorArguments.prototype['schedule'] = undefined;
 var _default = ConnectorArguments;
 exports["default"] = _default;
-},{"../ApiClient":3}],21:[function(require,module,exports){
+},{"../ApiClient":2}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4828,7 +4706,7 @@ ConnectorDeleteResponse.prototype['id'] = undefined;
 ConnectorDeleteResponse.prototype['deleted'] = undefined;
 var _default = ConnectorDeleteResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],22:[function(require,module,exports){
+},{"../ApiClient":2}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4950,7 +4828,7 @@ DocumentAssignmentParameters.prototype['is_reviewer'] = undefined;
 DocumentAssignmentParameters.prototype['due_date'] = undefined;
 var _default = DocumentAssignmentParameters;
 exports["default"] = _default;
-},{"../ApiClient":3}],23:[function(require,module,exports){
+},{"../ApiClient":2}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5027,7 +4905,7 @@ var DocumentAssignmentResponse = /*#__PURE__*/function () {
 DocumentAssignmentResponse.prototype['id'] = undefined;
 var _default = DocumentAssignmentResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],24:[function(require,module,exports){
+},{"../ApiClient":2}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5114,7 +4992,7 @@ DocumentDeleteResponse.prototype['id'] = undefined;
 DocumentDeleteResponse.prototype['deleted'] = undefined;
 var _default = DocumentDeleteResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],25:[function(require,module,exports){
+},{"../ApiClient":2}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5206,7 +5084,7 @@ DocumentParameters.prototype['name'] = undefined;
 DocumentParameters.prototype['project_id'] = undefined;
 var _default = DocumentParameters;
 exports["default"] = _default;
-},{"../ApiClient":3}],26:[function(require,module,exports){
+},{"../ApiClient":2}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5283,7 +5161,7 @@ var DocumentPretranslateParameters = /*#__PURE__*/function () {
 DocumentPretranslateParameters.prototype['id'] = undefined;
 var _default = DocumentPretranslateParameters;
 exports["default"] = _default;
-},{"../ApiClient":3}],27:[function(require,module,exports){
+},{"../ApiClient":2}],26:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5382,7 +5260,7 @@ DocumentPretranslateResponse.prototype['is_pretranslating'] = undefined;
 DocumentPretranslateResponse.prototype['documents'] = undefined;
 var _default = DocumentPretranslateResponse;
 exports["default"] = _default;
-},{"../ApiClient":3,"./DocumentPretranslating":28}],28:[function(require,module,exports){
+},{"../ApiClient":2,"./DocumentPretranslating":27}],27:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5521,7 +5399,7 @@ DocumentPretranslating.prototype['is_pretranslating'] = undefined;
 DocumentPretranslating.prototype['status'] = undefined;
 var _default = DocumentPretranslating;
 exports["default"] = _default;
-},{"../ApiClient":3,"./DocumentPretranslatingStatus":29}],29:[function(require,module,exports){
+},{"../ApiClient":2,"./DocumentPretranslatingStatus":28}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5599,7 +5477,7 @@ var DocumentPretranslatingStatus = /*#__PURE__*/function () {
 DocumentPretranslatingStatus.prototype['pretranslation'] = undefined;
 var _default = DocumentPretranslatingStatus;
 exports["default"] = _default;
-},{"../ApiClient":3}],30:[function(require,module,exports){
+},{"../ApiClient":2}],29:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5739,7 +5617,7 @@ DocumentQuote.prototype['num_segments_repetition'] = undefined;
 DocumentQuote.prototype['bands'] = undefined;
 var _default = DocumentQuote;
 exports["default"] = _default;
-},{"../ApiClient":3,"./MatchBand":46}],31:[function(require,module,exports){
+},{"../ApiClient":2,"./MatchBand":45}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5831,7 +5709,7 @@ DocumentUpdateParameters.prototype['id'] = undefined;
 DocumentUpdateParameters.prototype['name'] = undefined;
 var _default = DocumentUpdateParameters;
 exports["default"] = _default;
-},{"../ApiClient":3}],32:[function(require,module,exports){
+},{"../ApiClient":2}],31:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6082,7 +5960,7 @@ DocumentWithSegments.prototype['updated_at'] = undefined;
 DocumentWithSegments.prototype['segments'] = undefined;
 var _default = DocumentWithSegments;
 exports["default"] = _default;
-},{"../ApiClient":3,"./DocumentWithoutSegmentsStatus":34,"./Segment":68}],33:[function(require,module,exports){
+},{"../ApiClient":2,"./DocumentWithoutSegmentsStatus":33,"./Segment":67}],32:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6321,7 +6199,7 @@ DocumentWithoutSegments.prototype['created_at'] = undefined;
 DocumentWithoutSegments.prototype['updated_at'] = undefined;
 var _default = DocumentWithoutSegments;
 exports["default"] = _default;
-},{"../ApiClient":3,"./DocumentWithoutSegmentsStatus":34}],34:[function(require,module,exports){
+},{"../ApiClient":2,"./DocumentWithoutSegmentsStatus":33}],33:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6424,7 +6302,7 @@ DocumentWithoutSegmentsStatus['PretranslationEnum'] = {
 };
 var _default = DocumentWithoutSegmentsStatus;
 exports["default"] = _default;
-},{"../ApiClient":3}],35:[function(require,module,exports){
+},{"../ApiClient":2}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6502,7 +6380,7 @@ var Error = /*#__PURE__*/function () {
 Error.prototype['message'] = undefined;
 var _default = Error;
 exports["default"] = _default;
-},{"../ApiClient":3}],36:[function(require,module,exports){
+},{"../ApiClient":2}],35:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6650,7 +6528,7 @@ File.prototype['created_at'] = undefined;
 File.prototype['updated_at'] = undefined;
 var _default = File;
 exports["default"] = _default;
-},{"../ApiClient":3}],37:[function(require,module,exports){
+},{"../ApiClient":2}],36:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6737,7 +6615,7 @@ FileDeleteResponse.prototype['id'] = undefined;
 FileDeleteResponse.prototype['deleted'] = undefined;
 var _default = FileDeleteResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],38:[function(require,module,exports){
+},{"../ApiClient":2}],37:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6824,7 +6702,7 @@ LanguagesResponse.prototype['source_to_target'] = undefined;
 LanguagesResponse.prototype['code_to_name'] = undefined;
 var _default = LanguagesResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],39:[function(require,module,exports){
+},{"../ApiClient":2}],38:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6916,7 +6794,7 @@ LexiconEntry.prototype['translations'] = undefined;
 LexiconEntry.prototype['examples'] = undefined;
 var _default = LexiconEntry;
 exports["default"] = _default;
-},{"../ApiClient":3,"./LexiconEntryExamples":40,"./LexiconEntryTranslations":43}],40:[function(require,module,exports){
+},{"../ApiClient":2,"./LexiconEntryExamples":39,"./LexiconEntryTranslations":42}],39:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7064,7 +6942,7 @@ LexiconEntryExamples.prototype['similarity'] = undefined;
 LexiconEntryExamples.prototype['memory_id'] = undefined;
 var _default = LexiconEntryExamples;
 exports["default"] = _default;
-},{"../ApiClient":3,"./LexiconEntrySourceSpan":41,"./LexiconEntryTargetSpan":42}],41:[function(require,module,exports){
+},{"../ApiClient":2,"./LexiconEntrySourceSpan":40,"./LexiconEntryTargetSpan":41}],40:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7152,7 +7030,7 @@ LexiconEntrySourceSpan.prototype['start'] = undefined;
 LexiconEntrySourceSpan.prototype['length'] = undefined;
 var _default = LexiconEntrySourceSpan;
 exports["default"] = _default;
-},{"../ApiClient":3}],42:[function(require,module,exports){
+},{"../ApiClient":2}],41:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7240,7 +7118,7 @@ LexiconEntryTargetSpan.prototype['start'] = undefined;
 LexiconEntryTargetSpan.prototype['length'] = undefined;
 var _default = LexiconEntryTargetSpan;
 exports["default"] = _default;
-},{"../ApiClient":3}],43:[function(require,module,exports){
+},{"../ApiClient":2}],42:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7347,7 +7225,7 @@ LexiconEntryTranslations.prototype['frequency'] = undefined;
 LexiconEntryTranslations.prototype['memory_id'] = undefined;
 var _default = LexiconEntryTranslations;
 exports["default"] = _default;
-},{"../ApiClient":3}],44:[function(require,module,exports){
+},{"../ApiClient":2}],43:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7451,7 +7329,7 @@ LexiconUpdateParameters.prototype['source'] = undefined;
 LexiconUpdateParameters.prototype['target'] = undefined;
 var _default = LexiconUpdateParameters;
 exports["default"] = _default;
-},{"../ApiClient":3}],45:[function(require,module,exports){
+},{"../ApiClient":2}],44:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7538,7 +7416,7 @@ LexiconUpdateResponse.prototype['memory_id'] = undefined;
 LexiconUpdateResponse.prototype['success'] = undefined;
 var _default = LexiconUpdateResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],46:[function(require,module,exports){
+},{"../ApiClient":2}],45:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7646,7 +7524,7 @@ MatchBand.prototype['num_source_words'] = undefined;
 MatchBand.prototype['num_segments'] = undefined;
 var _default = MatchBand;
 exports["default"] = _default;
-},{"../ApiClient":3}],47:[function(require,module,exports){
+},{"../ApiClient":2}],46:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7824,7 +7702,7 @@ Memory.prototype['num_segments'] = undefined;
 Memory.prototype['resources'] = undefined;
 var _default = Memory;
 exports["default"] = _default;
-},{"../ApiClient":3}],48:[function(require,module,exports){
+},{"../ApiClient":2}],47:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7948,7 +7826,7 @@ MemoryCreateParameters.prototype['srclocale'] = undefined;
 MemoryCreateParameters.prototype['trglocale'] = undefined;
 var _default = MemoryCreateParameters;
 exports["default"] = _default;
-},{"../ApiClient":3}],49:[function(require,module,exports){
+},{"../ApiClient":2}],48:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8035,7 +7913,7 @@ MemoryDeleteResponse.prototype['id'] = undefined;
 MemoryDeleteResponse.prototype['deleted'] = undefined;
 var _default = MemoryDeleteResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],50:[function(require,module,exports){
+},{"../ApiClient":2}],49:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8122,7 +8000,7 @@ MemoryImportResponse.prototype['id'] = undefined;
 MemoryImportResponse.prototype['isProcessing'] = undefined;
 var _default = MemoryImportResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],51:[function(require,module,exports){
+},{"../ApiClient":2}],50:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8209,7 +8087,7 @@ MemoryInsertResponse.prototype['id'] = undefined;
 MemoryInsertResponse.prototype['num_updates'] = undefined;
 var _default = MemoryInsertResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],52:[function(require,module,exports){
+},{"../ApiClient":2}],51:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8301,7 +8179,7 @@ MemoryUpdateParameters.prototype['id'] = undefined;
 MemoryUpdateParameters.prototype['name'] = undefined;
 var _default = MemoryUpdateParameters;
 exports["default"] = _default;
-},{"../ApiClient":3}],53:[function(require,module,exports){
+},{"../ApiClient":2}],52:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8388,7 +8266,7 @@ MemoryUpdateResponse.prototype['id'] = undefined;
 MemoryUpdateResponse.prototype['num_updates'] = undefined;
 var _default = MemoryUpdateResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],54:[function(require,module,exports){
+},{"../ApiClient":2}],53:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8608,7 +8486,7 @@ Project.prototype['updated_at'] = undefined;
 Project.prototype['document'] = undefined;
 var _default = Project;
 exports["default"] = _default;
-},{"../ApiClient":3,"./DocumentWithoutSegments":33}],55:[function(require,module,exports){
+},{"../ApiClient":2,"./DocumentWithoutSegments":32}],54:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8730,7 +8608,7 @@ ProjectCreateParameters.prototype['due_date'] = undefined;
 ProjectCreateParameters.prototype['metadata'] = undefined;
 var _default = ProjectCreateParameters;
 exports["default"] = _default;
-},{"../ApiClient":3}],56:[function(require,module,exports){
+},{"../ApiClient":2}],55:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8817,7 +8695,7 @@ ProjectDeleteResponse.prototype['id'] = undefined;
 ProjectDeleteResponse.prototype['deleted'] = undefined;
 var _default = ProjectDeleteResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],57:[function(require,module,exports){
+},{"../ApiClient":2}],56:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8969,7 +8847,7 @@ ProjectQuote.prototype['bands'] = undefined;
 ProjectQuote.prototype['documents'] = undefined;
 var _default = ProjectQuote;
 exports["default"] = _default;
-},{"../ApiClient":3,"./DocumentQuote":30,"./MatchBand":46}],58:[function(require,module,exports){
+},{"../ApiClient":2,"./DocumentQuote":29,"./MatchBand":45}],57:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9129,7 +9007,7 @@ ProjectStatus.prototype['time_elapsed_review'] = undefined;
 ProjectStatus.prototype['resources'] = undefined;
 var _default = ProjectStatus;
 exports["default"] = _default;
-},{"../ApiClient":3,"./ResourceStatus":67}],59:[function(require,module,exports){
+},{"../ApiClient":2,"./ResourceStatus":66}],58:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9269,7 +9147,7 @@ ProjectUpdateResponse.prototype['metadata'] = undefined;
 ProjectUpdateResponse.prototype['sample_review_percentage'] = undefined;
 var _default = ProjectUpdateResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],60:[function(require,module,exports){
+},{"../ApiClient":2}],59:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9348,7 +9226,7 @@ var QARuleMatches = /*#__PURE__*/function () {
 QARuleMatches.prototype['matches'] = undefined;
 var _default = QARuleMatches;
 exports["default"] = _default;
-},{"../ApiClient":3,"./QARuleMatchesMatches":62}],61:[function(require,module,exports){
+},{"../ApiClient":2,"./QARuleMatchesMatches":61}],60:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9452,7 +9330,7 @@ QARuleMatchesContext.prototype['offset'] = undefined;
 QARuleMatchesContext.prototype['text'] = undefined;
 var _default = QARuleMatchesContext;
 exports["default"] = _default;
-},{"../ApiClient":3}],62:[function(require,module,exports){
+},{"../ApiClient":2}],61:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9604,7 +9482,7 @@ QARuleMatchesMatches.prototype['rule'] = undefined;
 QARuleMatchesMatches.prototype['shortMessage'] = undefined;
 var _default = QARuleMatchesMatches;
 exports["default"] = _default;
-},{"../ApiClient":3,"./QARuleMatchesContext":61,"./QARuleMatchesReplacements":63,"./QARuleMatchesRule":64}],63:[function(require,module,exports){
+},{"../ApiClient":2,"./QARuleMatchesContext":60,"./QARuleMatchesReplacements":62,"./QARuleMatchesRule":63}],62:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9681,7 +9559,7 @@ var QARuleMatchesReplacements = /*#__PURE__*/function () {
 QARuleMatchesReplacements.prototype['value'] = undefined;
 var _default = QARuleMatchesReplacements;
 exports["default"] = _default;
-},{"../ApiClient":3}],64:[function(require,module,exports){
+},{"../ApiClient":2}],63:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9817,7 +9695,7 @@ QARuleMatchesRule.prototype['subId'] = undefined;
 QARuleMatchesRule.prototype['urls'] = undefined;
 var _default = QARuleMatchesRule;
 exports["default"] = _default;
-},{"../ApiClient":3,"./QARuleMatchesRuleCategory":65,"./QARuleMatchesRuleUrls":66}],65:[function(require,module,exports){
+},{"../ApiClient":2,"./QARuleMatchesRuleCategory":64,"./QARuleMatchesRuleUrls":65}],64:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9904,7 +9782,7 @@ QARuleMatchesRuleCategory.prototype['id'] = undefined;
 QARuleMatchesRuleCategory.prototype['name'] = undefined;
 var _default = QARuleMatchesRuleCategory;
 exports["default"] = _default;
-},{"../ApiClient":3}],66:[function(require,module,exports){
+},{"../ApiClient":2}],65:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9981,7 +9859,7 @@ var QARuleMatchesRuleUrls = /*#__PURE__*/function () {
 QARuleMatchesRuleUrls.prototype['value'] = undefined;
 var _default = QARuleMatchesRuleUrls;
 exports["default"] = _default;
-},{"../ApiClient":3}],67:[function(require,module,exports){
+},{"../ApiClient":2}],66:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10179,7 +10057,7 @@ ResourceStatus.prototype['num_segments_confirmed'] = undefined;
 ResourceStatus.prototype['num_segments_reviewed'] = undefined;
 var _default = ResourceStatus;
 exports["default"] = _default;
-},{"../ApiClient":3}],68:[function(require,module,exports){
+},{"../ApiClient":2}],67:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10357,7 +10235,7 @@ Segment.prototype['is_confirmed'] = undefined;
 Segment.prototype['is_reviewed'] = undefined;
 var _default = Segment;
 exports["default"] = _default;
-},{"../ApiClient":3}],69:[function(require,module,exports){
+},{"../ApiClient":2}],68:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10467,7 +10345,7 @@ SegmentCreateParameters.prototype['source'] = undefined;
 SegmentCreateParameters.prototype['target'] = undefined;
 var _default = SegmentCreateParameters;
 exports["default"] = _default;
-},{"../ApiClient":3}],70:[function(require,module,exports){
+},{"../ApiClient":2}],69:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10554,7 +10432,7 @@ SegmentDeleteResponse.prototype['id'] = undefined;
 SegmentDeleteResponse.prototype['deleted'] = undefined;
 var _default = SegmentDeleteResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],71:[function(require,module,exports){
+},{"../ApiClient":2}],70:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10646,7 +10524,7 @@ SegmentUpdateParameters.prototype['id'] = undefined;
 SegmentUpdateParameters.prototype['target'] = undefined;
 var _default = SegmentUpdateParameters;
 exports["default"] = _default;
-},{"../ApiClient":3}],72:[function(require,module,exports){
+},{"../ApiClient":2}],71:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10836,7 +10714,7 @@ SegmentWithComments.prototype['is_reviewed'] = undefined;
 SegmentWithComments.prototype['comments'] = undefined;
 var _default = SegmentWithComments;
 exports["default"] = _default;
-},{"../ApiClient":3,"./Comment":18}],73:[function(require,module,exports){
+},{"../ApiClient":2,"./Comment":17}],72:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10924,7 +10802,7 @@ TaggedSegment.prototype['source_tagged'] = undefined;
 TaggedSegment.prototype['target_tagged'] = undefined;
 var _default = TaggedSegment;
 exports["default"] = _default;
-},{"../ApiClient":3}],74:[function(require,module,exports){
+},{"../ApiClient":2}],73:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11011,7 +10889,7 @@ TranslateRegisterResponse.prototype['source_hash'] = undefined;
 TranslateRegisterResponse.prototype['num_words'] = undefined;
 var _default = TranslateRegisterResponse;
 exports["default"] = _default;
-},{"../ApiClient":3}],75:[function(require,module,exports){
+},{"../ApiClient":2}],74:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11159,7 +11037,7 @@ Translation.prototype['targetDelimiters'] = undefined;
 Translation.prototype['targetWords'] = undefined;
 var _default = Translation;
 exports["default"] = _default;
-},{"../ApiClient":3}],76:[function(require,module,exports){
+},{"../ApiClient":2}],75:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11269,7 +11147,7 @@ TranslationList.prototype['sourceDelimiters'] = undefined;
 TranslationList.prototype['translation'] = undefined;
 var _default = TranslationList;
 exports["default"] = _default;
-},{"../ApiClient":3,"./Translation":75}],77:[function(require,module,exports){
+},{"../ApiClient":2,"./Translation":74}],76:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11377,7 +11255,7 @@ TranslationMemoryEntry.prototype['score'] = undefined;
 TranslationMemoryEntry.prototype['metadata'] = undefined;
 var _default = TranslationMemoryEntry;
 exports["default"] = _default;
-},{"../ApiClient":3}],78:[function(require,module,exports){
+},{"../ApiClient":2}],77:[function(require,module,exports){
 /**
  * Root reference for iframes.
  */
@@ -12286,7 +12164,7 @@ request.put = function(url, data, fn){
   return req;
 };
 
-},{"./is-object":79,"./request-base":80,"./response-base":81,"./should-retry":82,"component-emitter":1}],79:[function(require,module,exports){
+},{"./is-object":78,"./request-base":79,"./response-base":80,"./should-retry":81,"component-emitter":1}],78:[function(require,module,exports){
 'use strict';
 
 /**
@@ -12303,7 +12181,7 @@ function isObject(obj) {
 
 module.exports = isObject;
 
-},{}],80:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 'use strict';
 
 /**
@@ -12942,7 +12820,7 @@ RequestBase.prototype._setTimeouts = function() {
   }
 }
 
-},{"./is-object":79}],81:[function(require,module,exports){
+},{"./is-object":78}],80:[function(require,module,exports){
 'use strict';
 
 /**
@@ -13078,7 +12956,7 @@ ResponseBase.prototype._setStatusProperties = function(status){
     this.notFound = 404 == status;
 };
 
-},{"./utils":83}],82:[function(require,module,exports){
+},{"./utils":82}],81:[function(require,module,exports){
 'use strict';
 
 var ERROR_CODES = [
@@ -13105,7 +12983,7 @@ module.exports = function shouldRetry(err, res) {
   return false;
 };
 
-},{}],83:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 'use strict';
 
 /**
@@ -13176,8 +13054,7 @@ exports.cleanHeader = function(header, shouldStripCookie){
   return header;
 };
 
-},{}],84:[function(require,module,exports){
-require('dotenv').config();
+},{}],83:[function(require,module,exports){
 var LiltNode = require('lilt-node');
 
 const APIKey = document.getElementById("APIKeyInput").value;
@@ -13198,7 +13075,7 @@ try {
     apiInstance.root().then((data) => {
         console.log('API called successfully. Returned data: ' + data);
         window.sessionStorage.setItem("APIKEY", APIKey);
-        console.log("Successfully stored API Key in process.env")
+        console.log("Successfully stored API Key")
         window.location.href = "home.html";
     }, (error) => {
         console.error(error);
@@ -13207,9 +13084,7 @@ try {
 } catch {
     document.getElementById("errorMessage").innerHTML = "Invalid API Key";
 }
-},{"dotenv":2,"lilt-node":15}],85:[function(require,module,exports){
-
-},{}],86:[function(require,module,exports){
+},{"lilt-node":14}],84:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -13361,9 +13236,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],87:[function(require,module,exports){
-arguments[4][85][0].apply(exports,arguments)
-},{"dup":85}],88:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
+
+},{}],86:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -15144,7 +15019,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":86,"buffer":88,"ieee754":89}],89:[function(require,module,exports){
+},{"base64-js":84,"buffer":86,"ieee754":87}],87:[function(require,module,exports){
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -15231,777 +15106,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],90:[function(require,module,exports){
-exports.endianness = function () { return 'LE' };
-
-exports.hostname = function () {
-    if (typeof location !== 'undefined') {
-        return location.hostname
-    }
-    else return '';
-};
-
-exports.loadavg = function () { return [] };
-
-exports.uptime = function () { return 0 };
-
-exports.freemem = function () {
-    return Number.MAX_VALUE;
-};
-
-exports.totalmem = function () {
-    return Number.MAX_VALUE;
-};
-
-exports.cpus = function () { return [] };
-
-exports.type = function () { return 'Browser' };
-
-exports.release = function () {
-    if (typeof navigator !== 'undefined') {
-        return navigator.appVersion;
-    }
-    return '';
-};
-
-exports.networkInterfaces
-= exports.getNetworkInterfaces
-= function () { return {} };
-
-exports.arch = function () { return 'javascript' };
-
-exports.platform = function () { return 'browser' };
-
-exports.tmpdir = exports.tmpDir = function () {
-    return '/tmp';
-};
-
-exports.EOL = '\n';
-
-exports.homedir = function () {
-	return '/'
-};
-
-},{}],91:[function(require,module,exports){
-(function (process){(function (){
-// 'path' module extracted from Node.js v8.11.1 (only the posix part)
-// transplited with Babel
-
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-'use strict';
-
-function assertPath(path) {
-  if (typeof path !== 'string') {
-    throw new TypeError('Path must be a string. Received ' + JSON.stringify(path));
-  }
-}
-
-// Resolves . and .. elements in a path with directory names
-function normalizeStringPosix(path, allowAboveRoot) {
-  var res = '';
-  var lastSegmentLength = 0;
-  var lastSlash = -1;
-  var dots = 0;
-  var code;
-  for (var i = 0; i <= path.length; ++i) {
-    if (i < path.length)
-      code = path.charCodeAt(i);
-    else if (code === 47 /*/*/)
-      break;
-    else
-      code = 47 /*/*/;
-    if (code === 47 /*/*/) {
-      if (lastSlash === i - 1 || dots === 1) {
-        // NOOP
-      } else if (lastSlash !== i - 1 && dots === 2) {
-        if (res.length < 2 || lastSegmentLength !== 2 || res.charCodeAt(res.length - 1) !== 46 /*.*/ || res.charCodeAt(res.length - 2) !== 46 /*.*/) {
-          if (res.length > 2) {
-            var lastSlashIndex = res.lastIndexOf('/');
-            if (lastSlashIndex !== res.length - 1) {
-              if (lastSlashIndex === -1) {
-                res = '';
-                lastSegmentLength = 0;
-              } else {
-                res = res.slice(0, lastSlashIndex);
-                lastSegmentLength = res.length - 1 - res.lastIndexOf('/');
-              }
-              lastSlash = i;
-              dots = 0;
-              continue;
-            }
-          } else if (res.length === 2 || res.length === 1) {
-            res = '';
-            lastSegmentLength = 0;
-            lastSlash = i;
-            dots = 0;
-            continue;
-          }
-        }
-        if (allowAboveRoot) {
-          if (res.length > 0)
-            res += '/..';
-          else
-            res = '..';
-          lastSegmentLength = 2;
-        }
-      } else {
-        if (res.length > 0)
-          res += '/' + path.slice(lastSlash + 1, i);
-        else
-          res = path.slice(lastSlash + 1, i);
-        lastSegmentLength = i - lastSlash - 1;
-      }
-      lastSlash = i;
-      dots = 0;
-    } else if (code === 46 /*.*/ && dots !== -1) {
-      ++dots;
-    } else {
-      dots = -1;
-    }
-  }
-  return res;
-}
-
-function _format(sep, pathObject) {
-  var dir = pathObject.dir || pathObject.root;
-  var base = pathObject.base || (pathObject.name || '') + (pathObject.ext || '');
-  if (!dir) {
-    return base;
-  }
-  if (dir === pathObject.root) {
-    return dir + base;
-  }
-  return dir + sep + base;
-}
-
-var posix = {
-  // path.resolve([from ...], to)
-  resolve: function resolve() {
-    var resolvedPath = '';
-    var resolvedAbsolute = false;
-    var cwd;
-
-    for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-      var path;
-      if (i >= 0)
-        path = arguments[i];
-      else {
-        if (cwd === undefined)
-          cwd = process.cwd();
-        path = cwd;
-      }
-
-      assertPath(path);
-
-      // Skip empty entries
-      if (path.length === 0) {
-        continue;
-      }
-
-      resolvedPath = path + '/' + resolvedPath;
-      resolvedAbsolute = path.charCodeAt(0) === 47 /*/*/;
-    }
-
-    // At this point the path should be resolved to a full absolute path, but
-    // handle relative paths to be safe (might happen when process.cwd() fails)
-
-    // Normalize the path
-    resolvedPath = normalizeStringPosix(resolvedPath, !resolvedAbsolute);
-
-    if (resolvedAbsolute) {
-      if (resolvedPath.length > 0)
-        return '/' + resolvedPath;
-      else
-        return '/';
-    } else if (resolvedPath.length > 0) {
-      return resolvedPath;
-    } else {
-      return '.';
-    }
-  },
-
-  normalize: function normalize(path) {
-    assertPath(path);
-
-    if (path.length === 0) return '.';
-
-    var isAbsolute = path.charCodeAt(0) === 47 /*/*/;
-    var trailingSeparator = path.charCodeAt(path.length - 1) === 47 /*/*/;
-
-    // Normalize the path
-    path = normalizeStringPosix(path, !isAbsolute);
-
-    if (path.length === 0 && !isAbsolute) path = '.';
-    if (path.length > 0 && trailingSeparator) path += '/';
-
-    if (isAbsolute) return '/' + path;
-    return path;
-  },
-
-  isAbsolute: function isAbsolute(path) {
-    assertPath(path);
-    return path.length > 0 && path.charCodeAt(0) === 47 /*/*/;
-  },
-
-  join: function join() {
-    if (arguments.length === 0)
-      return '.';
-    var joined;
-    for (var i = 0; i < arguments.length; ++i) {
-      var arg = arguments[i];
-      assertPath(arg);
-      if (arg.length > 0) {
-        if (joined === undefined)
-          joined = arg;
-        else
-          joined += '/' + arg;
-      }
-    }
-    if (joined === undefined)
-      return '.';
-    return posix.normalize(joined);
-  },
-
-  relative: function relative(from, to) {
-    assertPath(from);
-    assertPath(to);
-
-    if (from === to) return '';
-
-    from = posix.resolve(from);
-    to = posix.resolve(to);
-
-    if (from === to) return '';
-
-    // Trim any leading backslashes
-    var fromStart = 1;
-    for (; fromStart < from.length; ++fromStart) {
-      if (from.charCodeAt(fromStart) !== 47 /*/*/)
-        break;
-    }
-    var fromEnd = from.length;
-    var fromLen = fromEnd - fromStart;
-
-    // Trim any leading backslashes
-    var toStart = 1;
-    for (; toStart < to.length; ++toStart) {
-      if (to.charCodeAt(toStart) !== 47 /*/*/)
-        break;
-    }
-    var toEnd = to.length;
-    var toLen = toEnd - toStart;
-
-    // Compare paths to find the longest common path from root
-    var length = fromLen < toLen ? fromLen : toLen;
-    var lastCommonSep = -1;
-    var i = 0;
-    for (; i <= length; ++i) {
-      if (i === length) {
-        if (toLen > length) {
-          if (to.charCodeAt(toStart + i) === 47 /*/*/) {
-            // We get here if `from` is the exact base path for `to`.
-            // For example: from='/foo/bar'; to='/foo/bar/baz'
-            return to.slice(toStart + i + 1);
-          } else if (i === 0) {
-            // We get here if `from` is the root
-            // For example: from='/'; to='/foo'
-            return to.slice(toStart + i);
-          }
-        } else if (fromLen > length) {
-          if (from.charCodeAt(fromStart + i) === 47 /*/*/) {
-            // We get here if `to` is the exact base path for `from`.
-            // For example: from='/foo/bar/baz'; to='/foo/bar'
-            lastCommonSep = i;
-          } else if (i === 0) {
-            // We get here if `to` is the root.
-            // For example: from='/foo'; to='/'
-            lastCommonSep = 0;
-          }
-        }
-        break;
-      }
-      var fromCode = from.charCodeAt(fromStart + i);
-      var toCode = to.charCodeAt(toStart + i);
-      if (fromCode !== toCode)
-        break;
-      else if (fromCode === 47 /*/*/)
-        lastCommonSep = i;
-    }
-
-    var out = '';
-    // Generate the relative path based on the path difference between `to`
-    // and `from`
-    for (i = fromStart + lastCommonSep + 1; i <= fromEnd; ++i) {
-      if (i === fromEnd || from.charCodeAt(i) === 47 /*/*/) {
-        if (out.length === 0)
-          out += '..';
-        else
-          out += '/..';
-      }
-    }
-
-    // Lastly, append the rest of the destination (`to`) path that comes after
-    // the common path parts
-    if (out.length > 0)
-      return out + to.slice(toStart + lastCommonSep);
-    else {
-      toStart += lastCommonSep;
-      if (to.charCodeAt(toStart) === 47 /*/*/)
-        ++toStart;
-      return to.slice(toStart);
-    }
-  },
-
-  _makeLong: function _makeLong(path) {
-    return path;
-  },
-
-  dirname: function dirname(path) {
-    assertPath(path);
-    if (path.length === 0) return '.';
-    var code = path.charCodeAt(0);
-    var hasRoot = code === 47 /*/*/;
-    var end = -1;
-    var matchedSlash = true;
-    for (var i = path.length - 1; i >= 1; --i) {
-      code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          if (!matchedSlash) {
-            end = i;
-            break;
-          }
-        } else {
-        // We saw the first non-path separator
-        matchedSlash = false;
-      }
-    }
-
-    if (end === -1) return hasRoot ? '/' : '.';
-    if (hasRoot && end === 1) return '//';
-    return path.slice(0, end);
-  },
-
-  basename: function basename(path, ext) {
-    if (ext !== undefined && typeof ext !== 'string') throw new TypeError('"ext" argument must be a string');
-    assertPath(path);
-
-    var start = 0;
-    var end = -1;
-    var matchedSlash = true;
-    var i;
-
-    if (ext !== undefined && ext.length > 0 && ext.length <= path.length) {
-      if (ext.length === path.length && ext === path) return '';
-      var extIdx = ext.length - 1;
-      var firstNonSlashEnd = -1;
-      for (i = path.length - 1; i >= 0; --i) {
-        var code = path.charCodeAt(i);
-        if (code === 47 /*/*/) {
-            // If we reached a path separator that was not part of a set of path
-            // separators at the end of the string, stop now
-            if (!matchedSlash) {
-              start = i + 1;
-              break;
-            }
-          } else {
-          if (firstNonSlashEnd === -1) {
-            // We saw the first non-path separator, remember this index in case
-            // we need it if the extension ends up not matching
-            matchedSlash = false;
-            firstNonSlashEnd = i + 1;
-          }
-          if (extIdx >= 0) {
-            // Try to match the explicit extension
-            if (code === ext.charCodeAt(extIdx)) {
-              if (--extIdx === -1) {
-                // We matched the extension, so mark this as the end of our path
-                // component
-                end = i;
-              }
-            } else {
-              // Extension does not match, so our result is the entire path
-              // component
-              extIdx = -1;
-              end = firstNonSlashEnd;
-            }
-          }
-        }
-      }
-
-      if (start === end) end = firstNonSlashEnd;else if (end === -1) end = path.length;
-      return path.slice(start, end);
-    } else {
-      for (i = path.length - 1; i >= 0; --i) {
-        if (path.charCodeAt(i) === 47 /*/*/) {
-            // If we reached a path separator that was not part of a set of path
-            // separators at the end of the string, stop now
-            if (!matchedSlash) {
-              start = i + 1;
-              break;
-            }
-          } else if (end === -1) {
-          // We saw the first non-path separator, mark this as the end of our
-          // path component
-          matchedSlash = false;
-          end = i + 1;
-        }
-      }
-
-      if (end === -1) return '';
-      return path.slice(start, end);
-    }
-  },
-
-  extname: function extname(path) {
-    assertPath(path);
-    var startDot = -1;
-    var startPart = 0;
-    var end = -1;
-    var matchedSlash = true;
-    // Track the state of characters (if any) we see before our first dot and
-    // after any path separator we find
-    var preDotState = 0;
-    for (var i = path.length - 1; i >= 0; --i) {
-      var code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          // If we reached a path separator that was not part of a set of path
-          // separators at the end of the string, stop now
-          if (!matchedSlash) {
-            startPart = i + 1;
-            break;
-          }
-          continue;
-        }
-      if (end === -1) {
-        // We saw the first non-path separator, mark this as the end of our
-        // extension
-        matchedSlash = false;
-        end = i + 1;
-      }
-      if (code === 46 /*.*/) {
-          // If this is our first dot, mark it as the start of our extension
-          if (startDot === -1)
-            startDot = i;
-          else if (preDotState !== 1)
-            preDotState = 1;
-      } else if (startDot !== -1) {
-        // We saw a non-dot and non-path separator before our dot, so we should
-        // have a good chance at having a non-empty extension
-        preDotState = -1;
-      }
-    }
-
-    if (startDot === -1 || end === -1 ||
-        // We saw a non-dot character immediately before the dot
-        preDotState === 0 ||
-        // The (right-most) trimmed path component is exactly '..'
-        preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
-      return '';
-    }
-    return path.slice(startDot, end);
-  },
-
-  format: function format(pathObject) {
-    if (pathObject === null || typeof pathObject !== 'object') {
-      throw new TypeError('The "pathObject" argument must be of type Object. Received type ' + typeof pathObject);
-    }
-    return _format('/', pathObject);
-  },
-
-  parse: function parse(path) {
-    assertPath(path);
-
-    var ret = { root: '', dir: '', base: '', ext: '', name: '' };
-    if (path.length === 0) return ret;
-    var code = path.charCodeAt(0);
-    var isAbsolute = code === 47 /*/*/;
-    var start;
-    if (isAbsolute) {
-      ret.root = '/';
-      start = 1;
-    } else {
-      start = 0;
-    }
-    var startDot = -1;
-    var startPart = 0;
-    var end = -1;
-    var matchedSlash = true;
-    var i = path.length - 1;
-
-    // Track the state of characters (if any) we see before our first dot and
-    // after any path separator we find
-    var preDotState = 0;
-
-    // Get non-dir info
-    for (; i >= start; --i) {
-      code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          // If we reached a path separator that was not part of a set of path
-          // separators at the end of the string, stop now
-          if (!matchedSlash) {
-            startPart = i + 1;
-            break;
-          }
-          continue;
-        }
-      if (end === -1) {
-        // We saw the first non-path separator, mark this as the end of our
-        // extension
-        matchedSlash = false;
-        end = i + 1;
-      }
-      if (code === 46 /*.*/) {
-          // If this is our first dot, mark it as the start of our extension
-          if (startDot === -1) startDot = i;else if (preDotState !== 1) preDotState = 1;
-        } else if (startDot !== -1) {
-        // We saw a non-dot and non-path separator before our dot, so we should
-        // have a good chance at having a non-empty extension
-        preDotState = -1;
-      }
-    }
-
-    if (startDot === -1 || end === -1 ||
-    // We saw a non-dot character immediately before the dot
-    preDotState === 0 ||
-    // The (right-most) trimmed path component is exactly '..'
-    preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
-      if (end !== -1) {
-        if (startPart === 0 && isAbsolute) ret.base = ret.name = path.slice(1, end);else ret.base = ret.name = path.slice(startPart, end);
-      }
-    } else {
-      if (startPart === 0 && isAbsolute) {
-        ret.name = path.slice(1, startDot);
-        ret.base = path.slice(1, end);
-      } else {
-        ret.name = path.slice(startPart, startDot);
-        ret.base = path.slice(startPart, end);
-      }
-      ret.ext = path.slice(startDot, end);
-    }
-
-    if (startPart > 0) ret.dir = path.slice(0, startPart - 1);else if (isAbsolute) ret.dir = '/';
-
-    return ret;
-  },
-
-  sep: '/',
-  delimiter: ':',
-  win32: null,
-  posix: null
-};
-
-posix.posix = posix;
-
-module.exports = posix;
-
-}).call(this)}).call(this,require('_process'))
-},{"_process":92}],92:[function(require,module,exports){
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],93:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -16087,7 +15192,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],94:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -16174,10 +15279,10 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],95:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":93,"./encode":94}]},{},[84]);
+},{"./decode":88,"./encode":89}]},{},[83]);

@@ -1,0 +1,28 @@
+.header {
+    padding: 60px;
+    text-align: center;
+    background: #2F25B6;
+    color: white;
+    font-size: 30px;
+  }
+
+.container {
+    height: 200px;
+    position: relative;
+    background-color: white;
+    margin: 40;
+    border-radius: 12px;
+  }
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+body {
+    background-color: #2F25B6;
+}

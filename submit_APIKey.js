@@ -1,4 +1,3 @@
-require('dotenv').config();
 var LiltNode = require('lilt-node');
 
 const APIKey = document.getElementById("APIKeyInput").value;

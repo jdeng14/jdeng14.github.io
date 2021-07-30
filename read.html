@@ -1,22 +1,23 @@
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="index.css" />
+        <link rel="stylesheet" type="text/css" href="read.css" />
         <!-- <script type="text/javascript" src="//dl.frontapp.com/libs/plugin-sdk-1.0.1.min.js"></script> -->
         <script type="text/javascript" src="read_bundle.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </head>
     <body>
+        <div class="header">
+            <img src="images/logo-white.svg" alt="Lilt">
+        </div>
         <div class="container">
             <div class="center">
-                <p id="translatedText">Potatoes</p>
+                <p id="translatedText">Patatas</p>
             </div>
         </div>
-        <script type="text/javascript">
-            $("#translatedText").load(async function() {
-                const text = await 
-                $(this).html()
-            }
-            );
-        </script>
+        <div class="container">
+            <div class="center">
+                <p id="originalText">Potatoes</p>
+            </div>
+        </div>
     </body>
 </html>
