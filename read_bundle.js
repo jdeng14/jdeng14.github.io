@@ -24003,7 +24003,8 @@ Front.contextUpdates.subscribe(context => {
         break;
       case 'singleConversation':
         console.log("Single Conversation");
-        listAllMessages();
+        Front.listMessages(undefined, source.token);
+        // listAllMessages();
         break;
       case 'multiConversations':
         console.log('Multiple conversations selected', context.conversations);
