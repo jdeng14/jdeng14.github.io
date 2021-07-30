@@ -9,7 +9,7 @@ Front.contextUpdates.subscribe(context => {
         console.log('No conversation selected');
         break;
       case 'singleConversation':
-        console.log(listAllMessages());
+        console.log(await listAllMessages());
         console.log("Single Conversation");
         break;
       case 'multiConversations':
@@ -39,7 +39,7 @@ async function listAllMessages() {
         }
         return messages;
     } catch (error) {
-        if (isCancelError(error)) {
+        if (Front.isCancelError(error)) {
             return; // Do nothing.
         }
         throw error;

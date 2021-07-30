@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Flama';
+  src:  url('fonts/Flama-Book.a61600d.woff2') format('woff2');
+}
+
 .header {
     padding: 60px;
     text-align: center;
@@ -12,16 +17,17 @@ body {
 
 .button {
   border: none;
-  color: white;
+  color: rgb(7, 27, 90);
   background-color: #85E8BA;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 20px;
+  font-size: 40px;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 12px;
+  font-family: 'Flama', Arial, Helvetica, sans-serif;
 }
 
 .container {
@@ -30,12 +36,20 @@ body {
 }
 
 .APIKeyInput {
-  font-size: 20px;
+  font-size: 40px;
 }
 
 .APIInputText {
-  font-size: 20px;
+  font-size: 40px;
   color: white;
+  font-family: 'Flama', Arial, Helvetica, sans-serif;
+}
+
+.error {
+  color: rgb(139, 32, 32);
+  font-family: 'Flama', Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  left: 100%;
 }
 
 .center {
