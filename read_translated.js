@@ -41,7 +41,12 @@ async function listAllMessages(context) {
         for (let index = 0; index < messages.length; index++) {
             console.log(messages[index]);
         }
-        return messages;
+        document.getElementById("originalText").innerHTML = messages.content.body;
+        let messages_arr = []
+        messages_arr.push(messages.content.body);
+        let translatedMessages = await translateAllMessages(messages_arr, "es", "es", 60312);
+        document.getElementById("translatedText").innerHTML = translatedMessages[0];
+
     } catch (error) {
         if (Front.isCancelError(error)) {
             return; // Do nothing.
