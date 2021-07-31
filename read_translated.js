@@ -46,7 +46,9 @@ async function listAllMessages(context) {
         document.getElementById("originalText").innerHTML = inner;
         let messages_arr = inner.split(/<[^>]*>/)
         let translatedMessages = await translateAllMessages(messages_arr, "en", "es", 60312);
+        console.log(translatedMessages);
         let tags = inner.match(/<\/?[\w\d]+>/gi);
+        console.log(tags);
         let translatedInner = "";
         for (let index = 0; index < translatedMessages.length; index++) {
             if (inner.charAt(0) === '<') {
@@ -87,8 +89,9 @@ async function translateAllMessages(messages, srclang, trglang, memoryId) {
 
     let translatedMessages = []
     for (let index = 0; index < messages.length; index++) {
-        if (messages[index]) {
+        if (messages[index] !== "") {
             let translated = await translateSingle(apiInstance, messages[index], srclang, trglang, memoryId);
+            console.log(translated);
             translatedMessages.push(translated);
         } else {
             translatedMessages.push("")
@@ -105,10 +108,5 @@ async function translateSingle(apiInstance, message, srclang, trglang, memoryId)
         };
     let translateData = await apiInstance.translateSegment(memoryId, opts);
     let translatedMessage = translateData.translation[0].targetWithTags;
-    console.log(translatedMessage);
     return translatedMessage;
-}
-
-function splitHTML(message) {
-    message.split("<.*>")
 }

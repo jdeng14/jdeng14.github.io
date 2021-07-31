@@ -36,6 +36,11 @@
     margin: 40;
 }
 
+.boxHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
 body {
     background-color: #2F25B6;
 }
