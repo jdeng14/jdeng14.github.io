@@ -24039,7 +24039,7 @@ async function listAllMessages(context) {
         document.getElementById("originalText").innerHTML = inner;
         let messages_arr = []
         messages_arr.push(inner);
-        let translatedMessages = await translateAllMessages(messages_arr, "es", "es", 60312);
+        let translatedMessages = await translateAllMessages(messages_arr, "en", "es", 60312);
         document.getElementById("translatedText").innerHTML = translatedMessages[0];
         console.log(inner);
         console.log(translatedMessages[0])
