@@ -24048,7 +24048,7 @@ async function listAllMessages(context) {
                 translatedInner = translatedInner.concat(tags[index]);
                 translatedInner = translatedInner.concat(translatedMessages[index]);
             } else {
-                translatedInner = innetranslatedInner.concat(translatedMessages[index]);
+                translatedInner = translatedInner.concat(translatedMessages[index]);
                 translatedInner = translatedInner.concat(tags[index]);
             }
         }
