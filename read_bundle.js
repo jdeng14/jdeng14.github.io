@@ -24039,18 +24039,12 @@ async function listAllMessages(context) {
         document.getElementById("originalText").innerHTML = inner;
         let messages_arr = inner.split(/<[^>]*>/)
         let translatedMessages = await translateAllMessages(messages_arr, "en", "es", 60312);
-        console.log(translatedMessages);
-        let tags = inner.match(/<\/?[\w\d]+>/gi);
-        console.log(tags);
-        let translatedInner = "";
-        for (let index = 0; index < translatedMessages.length; index++) {
-            if (inner.charAt(0) === '<') {
-                translatedInner = translatedInner.concat(tags[index]);
-                translatedInner = translatedInner.concat(translatedMessages[index]);
-            } else {
-                translatedInner = translatedInner.concat(translatedMessages[index]);
-                translatedInner = translatedInner.concat(tags[index]);
-            }
+        let tags = inner.match(/<[^>]*>/gi);
+        let translatedInner = translatedMessages[0];
+
+        for (let index = 0; index < tags.length; index++) {
+            translatedInner = translatedInner.concat(tags[index]);
+            translatedInner = translatedInner.concat(translatedMessages[index + 1]);
         }
         document.getElementById("translatedText").innerHTML = translatedInner;
         console.log(inner);
@@ -24084,7 +24078,6 @@ async function translateAllMessages(messages, srclang, trglang, memoryId) {
     for (let index = 0; index < messages.length; index++) {
         if (messages[index] !== "") {
             let translated = await translateSingle(apiInstance, messages[index], srclang, trglang, memoryId);
-            console.log(translated);
             translatedMessages.push(translated);
         } else {
             translatedMessages.push("")
