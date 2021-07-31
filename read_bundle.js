@@ -24031,14 +24031,18 @@ async function listAllMessages(context) {
             messages.push(...results);
         }
 
+        let inner = "";
         for (let index = 0; index < messages.length; index++) {
             console.log(messages[index]);
+            inner = inner.concat(messages[index].content.body);
         }
-        document.getElementById("originalText").innerHTML = messages.content.body;
+        document.getElementById("originalText").innerHTML = inner;
         let messages_arr = []
-        messages_arr.push(messages.content.body);
+        messages_arr.push(inner);
         let translatedMessages = await translateAllMessages(messages_arr, "es", "es", 60312);
         document.getElementById("translatedText").innerHTML = translatedMessages[0];
+        console.log(inner);
+        console.log(translatedMessages[0])
 
     } catch (error) {
         if (Front.isCancelError(error)) {
