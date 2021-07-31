@@ -44,12 +44,22 @@ async function listAllMessages(context) {
             inner = inner.concat(messages[index].content.body);
         }
         document.getElementById("originalText").innerHTML = inner;
-        let messages_arr = []
-        messages_arr.push(inner);
+        let messages_arr = inner.split(/<[^>]*>/)
         let translatedMessages = await translateAllMessages(messages_arr, "en", "es", 60312);
-        document.getElementById("translatedText").innerHTML = translatedMessages[0];
+        let tags = inner.match(/<\/?[\w\d]+>/gi);
+        let translatedInner = "";
+        for (index = 0; index < translatedMessages.length; index++) {
+            if (inner.charAt(0) === '<') {
+                translatedInner.concat(tags[index]);
+                translatedInner.concat(translatedMessages[index]);
+            } else {
+                translatedInner.concat(translatedMessages[index]);
+                translatedInner.concat(tags[index]);
+            }
+        }
+        document.getElementById("translatedText").innerHTML = translatedInner;
         console.log(inner);
-        console.log(translatedMessages[0])
+        console.log(translatedInner);
 
     } catch (error) {
         if (Front.isCancelError(error)) {
@@ -77,8 +87,12 @@ async function translateAllMessages(messages, srclang, trglang, memoryId) {
 
     let translatedMessages = []
     for (let index = 0; index < messages.length; index++) {
-        let translated = await translateSingle(apiInstance, messages[index], srclang, trglang, memoryId);
-        translatedMessages.push(translated);
+        if (messages[index]) {
+            let translated = await translateSingle(apiInstance, messages[index], srclang, trglang, memoryId);
+            translatedMessages.push(translated);
+        } else {
+            translatedMessages.push("")
+        }
     }
     return translatedMessages;
 }
@@ -93,4 +107,8 @@ async function translateSingle(apiInstance, message, srclang, trglang, memoryId)
     let translatedMessage = translateData.translation[0].targetWithTags;
     console.log(translatedMessage);
     return translatedMessage;
+}
+
+function splitHTML(message) {
+    message.split("<.*>")
 }

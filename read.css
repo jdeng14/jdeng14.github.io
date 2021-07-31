@@ -30,6 +30,12 @@
     overflow-y: auto;
 }
 
+.boxTitle {
+    color: white;
+    font-size: 36px;
+    margin: 40;
+}
+
 body {
     background-color: #2F25B6;
 }
