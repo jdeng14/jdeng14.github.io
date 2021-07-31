@@ -48,7 +48,7 @@ async function listAllMessages(context) {
         let translatedMessages = await translateAllMessages(messages_arr, "en", "es", 60312);
         let tags = inner.match(/<\/?[\w\d]+>/gi);
         let translatedInner = "";
-        for (index = 0; index < translatedMessages.length; index++) {
+        for (let index = 0; index < translatedMessages.length; index++) {
             if (inner.charAt(0) === '<') {
                 translatedInner.concat(tags[index]);
                 translatedInner.concat(translatedMessages[index]);
