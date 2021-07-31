@@ -52,11 +52,11 @@ async function listAllMessages(context) {
         let translatedInner = "";
         for (let index = 0; index < translatedMessages.length; index++) {
             if (inner.charAt(0) === '<') {
-                translatedInner.concat(tags[index]);
-                translatedInner.concat(translatedMessages[index]);
+                translatedInner = translatedInner.concat(tags[index]);
+                translatedInner = translatedInner.concat(translatedMessages[index]);
             } else {
-                translatedInner.concat(translatedMessages[index]);
-                translatedInner.concat(tags[index]);
+                translatedInner = innetranslatedInner.concat(translatedMessages[index]);
+                translatedInner = translatedInner.concat(tags[index]);
             }
         }
         document.getElementById("translatedText").innerHTML = translatedInner;

@@ -24045,11 +24045,11 @@ async function listAllMessages(context) {
         let translatedInner = "";
         for (let index = 0; index < translatedMessages.length; index++) {
             if (inner.charAt(0) === '<') {
-                translatedInner.concat(tags[index]);
-                translatedInner.concat(translatedMessages[index]);
+                translatedInner = translatedInner.concat(tags[index]);
+                translatedInner = translatedInner.concat(translatedMessages[index]);
             } else {
-                translatedInner.concat(translatedMessages[index]);
-                translatedInner.concat(tags[index]);
+                translatedInner = innetranslatedInner.concat(translatedMessages[index]);
+                translatedInner = translatedInner.concat(tags[index]);
             }
         }
         document.getElementById("translatedText").innerHTML = translatedInner;
@@ -24084,6 +24084,7 @@ async function translateAllMessages(messages, srclang, trglang, memoryId) {
     for (let index = 0; index < messages.length; index++) {
         if (messages[index] !== "") {
             let translated = await translateSingle(apiInstance, messages[index], srclang, trglang, memoryId);
+            console.log(translated);
             translatedMessages.push(translated);
         } else {
             translatedMessages.push("")
@@ -24100,7 +24101,6 @@ async function translateSingle(apiInstance, message, srclang, trglang, memoryId)
         };
     let translateData = await apiInstance.translateSegment(memoryId, opts);
     let translatedMessage = translateData.translation[0].targetWithTags;
-    console.log(translatedMessage);
     return translatedMessage;
 }
 },{"@frontapp/plugin-sdk":1,"lilt-node":25}],295:[function(require,module,exports){
