@@ -24006,7 +24006,7 @@ Front.contextUpdates.subscribe(context => {
         break;
       case 'singleConversation':
         console.log("Single Conversation");
-        setMessageID;
+        setMessageID();
         break;
       case 'multiConversations':
         console.log('Multiple conversations selected', context.conversations);
