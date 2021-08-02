@@ -1,0 +1,101 @@
+@font-face {
+  font-family: 'Flama';
+  src:  url('fonts/Flama-Book.a61600d.woff2') format('woff2');
+}
+
+.header {
+    padding: 20px;
+    text-align: center;
+    background: #2F25B6;
+    color: white;
+    font-size: 30px;
+  }
+
+.center {
+    margin: 20;
+    height: 500px;
+    background-color: white;
+    border-radius: 12px;
+  }
+
+.boxTitle {
+    color: white;
+    font-size: 24px;
+    margin: 30;
+}
+
+.languageSelector {
+  margin: 30;
+}
+
+.targetLanguages {
+  max-height: 10px;
+  overflow-y: auto !important;
+}
+
+.selectLabel {
+  font-size: 18px;
+  color: white;
+  font-family: 'Flama', Arial, Helvetica, sans-serif;
+}
+
+.backButton {
+  padding: 20;
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  color: white;
+  font-size: 18px;
+  font-family: 'Flama', Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: #2F25B6;
+}
+
+.button {
+    border: none;
+    color: rgb(7, 27, 90);
+    background-color: #85E8BA;
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 12px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+    height:100px;
+    width:300px;
+    margin:0;
+    display:block;
+  }
+
+  .buttonCenter {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+  .buttonContainer {
+    height: 150px;
+    position: relative;
+  }
+
+  .messageInput {
+    width: 90%;
+    max-width: 90%;
+    height: 95%;
+    max-height: 95%;
+    border: none;
+    outline: none;
+    font-size: 24px;
+    margin: 10;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+  }

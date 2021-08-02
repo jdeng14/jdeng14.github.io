@@ -1,7 +1,10 @@
 "use strict";
 
 var Front = require('@frontapp/plugin-sdk');
-var LiltNode = require('lilt-node')
+var LiltNode = require('lilt-node');
+const { connectableObservableDescriptor } = require('rxjs/internal/observable/ConnectableObservable');
+
+let originalMessageID = undefined;
 
 Front.contextUpdates.subscribe(context => {
     switch(context.type) {
@@ -10,7 +13,7 @@ Front.contextUpdates.subscribe(context => {
         break;
       case 'singleConversation':
         console.log("Single Conversation");
-        listAllMessages(context);
+        setMessageID;
         break;
       case 'multiConversations':
         console.log('Multiple conversations selected', context.conversations);
@@ -21,8 +24,7 @@ Front.contextUpdates.subscribe(context => {
     }
   });
 
-
-async function listAllMessages(context) {
+async function setMessageID() {
     const source = Front.buildCancelTokenSource();
     // Do not wait more than 500ms for the list of messages.
     setTimeout(() => source.cancel(), 500);
@@ -38,24 +40,34 @@ async function listAllMessages(context) {
             messages.push(...results);
         }
 
-        let inner = "";
-        for (let index = 0; index < messages.length; index++) {
-            console.log(messages[index]);
-            inner = inner.concat(messages[index].content.body);
-        }
-        document.getElementById("originalText").innerHTML = inner;
-        let messages_arr = []
-        messages_arr.push(inner);
-        let translatedMessages = await translateAllMessages(messages_arr, "en", "es", 60312);
-        document.getElementById("translatedText").innerHTML = translatedMessages[0];
-        console.log(inner);
-        console.log(translatedMessages[0])
+        originalMessageID = results[results.length - 1].id;
 
     } catch (error) {
         if (Front.isCancelError(error)) {
             return; // Do nothing.
         }
         throw error;
+    }
+}
+async function sendTranslatedMessage() {
+    let originalMessage = document.getElementById("messageInput").value;
+    let messages = []
+    messages.push(originalMessage);
+    let translatedMessages = await translateAllMessages(messages, "en", "es", 60312);
+    let translatedMessage = translatedMessages[0];
+    if (originalMessageID) {
+        const draft = await Front.createDraft({
+            content: {
+              body: translatedMessage,
+              type: 'text'
+            },
+            replyOptions: {
+              type: 'reply',
+              originalMessageId: originalMessageID
+            }
+        });
+    } else {
+        console.log("No Conversation Selected");
     }
 }
 

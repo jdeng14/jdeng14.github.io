@@ -6,24 +6,40 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </head>
     <body>
+        <input type="button" class="backButton" onclick="location.href='home.html';" value="Back" />
         <div class="header">
             <img src="images/logo-white.svg" alt="Lilt">
         </div>
-        <div class="boxHeader">
-            <p class="boxTitle">Translated Text:</p>
+
+        <p class="boxTitle">Translated Message:</p>
+        <div class="languageSelector">
+            <label for="targetChoice" class="selectLabel">Select Target Language:</label>
+            <input list="targetLanguages" id="targetChoice" name="targetChoice" />
+            <datalist id="targetLanguages" style="overflow-y: auto!important">
+                <option value="English">
+                <option value="Spanish">
+                <option value="German">
+                <option value="French">
+                <option value="Russian">
+                <option value="English">
+                <option value="Spanish">
+                <option value="German">
+                <option value="French">
+                <option value="Russian">
+                <option value="English">
+                <option value="Spanish">
+                <option value="German">
+                <option value="French">
+                <option value="Russian">
+            </datalist>
         </div>
-        <label for="ice-cream-choice">Choose a flavor:</label>
-        <input list="ice-cream-flavors" id="languages" name="ice-cream-choice" />
-        <datalist id="languages">
-            <option value="en">
-            <option value="es">
-        </datalist>
+    
         <div class="container">
             <div class="center">
                 <p id="translatedText" class="textBox"></p>
             </div>
         </div>
-        <p class="boxTitle">Original Text:</p>
+        <p class="boxTitle">Original Message:</p>
         <div class="container">
             <div class="center">
                 <p id="originalText" class="textBox"></p>

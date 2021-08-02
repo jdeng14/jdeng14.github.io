@@ -10,6 +10,7 @@ Front.contextUpdates.subscribe(context => {
         break;
       case 'singleConversation':
         console.log("Single Conversation");
+        document.getElementById("translatedText").innerHTML = "Loading...";
         listAllMessages(context);
         break;
       case 'multiConversations':

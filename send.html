@@ -1,23 +1,36 @@
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="read.css" />
+        <link rel="stylesheet" type="text/css" href="send.css" />
         <script type="text/javascript" src="send_bundle.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </head>
     <body>
+        <input type="button" class="backButton" onclick="location.href='home.html';" value="Back" />
         <div class="header">
             <img src="images/logo-white.svg" alt="Lilt">
         </div>
-        <div class="container">
-            <div class="center">
-                <p id="userText">Patatas</p>
-                <textarea id="w3review" name="w3review" rows="4" cols="50">
-                    At w3schools.com you will learn how to make a website. They offer free tutorials in
-                    
-                    
-                    
-                    all web development technologies.
-                </textarea>
+        <div class="languageSelector">
+            <label for="targetChoice" class="selectLabel">Select Target Language:</label>
+            <input list="targetLanguages" id="targetChoice" name="targetChoice" />
+            <datalist id="targetLanguages" style="overflow-y: auto!important">
+                <option value="English">
+                <option value="Spanish">
+                <option value="German">
+                <option value="French">
+                <option value="Russian">
+            </datalist>
+        </div>
+        <div class="center">
+            <textarea id="messageInput" class="messageInput"></textarea>
+        </div>
+        <div class="buttonContainer">
+            <div class="buttonCenter">
+                <button id="manualButton" class="button" >Create Translated Draft Message</button>
+                <script type="text/javascript">
+                    document.getElementById("manualButton").onclick = async function () {
+                        await sendTranslatedMessage();
+                    };
+                </script>
             </div>
         </div>
     </body>

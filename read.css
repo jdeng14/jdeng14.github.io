@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Flama';
+  src:  url('fonts/Flama-Book.a61600d.woff2') format('woff2');
+}
+
 .header {
     padding: 60px;
     text-align: center;
@@ -13,6 +18,12 @@
     margin: 40;
     border-radius: 12px;
   }
+
+.centerContainer {
+  height: 600px;
+  position: relative;
+  margin: 40;
+}
 
 .center {
     margin: 30;
@@ -36,9 +47,30 @@
     margin: 40;
 }
 
-.boxHeader {
-  display: flex;
-  justify-content: space-between;
+.languageSelector {
+  margin: 40;
+}
+
+.targetLanguages {
+  max-height: 10px;
+  overflow-y: auto !important;
+}
+
+.selectLabel {
+  font-size: 24px;
+  color: white
+}
+
+.backButton {
+  padding: 20;
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  color: white;
+  font-size: 24px;
 }
 
 body {
