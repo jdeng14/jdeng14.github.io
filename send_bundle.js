@@ -24044,23 +24044,27 @@ async function setMessageID() {
 }
 async function sendTranslatedMessage() {
     let originalMessage = document.getElementById("messageInput").value;
-    let messages = []
-    messages.push(originalMessage);
-    let translatedMessages = await translateAllMessages(messages, "en", "es", 60312);
-    let translatedMessage = translatedMessages[0];
-    if (originalMessageID) {
-        const draft = await Front.createDraft({
-            content: {
-              body: translatedMessage,
-              type: 'text'
-            },
-            replyOptions: {
-              type: 'reply',
-              originalMessageId: originalMessageID
-            }
-        });
+    if (originalMessage) {
+        let messages = []
+        messages.push(originalMessage);
+        let translatedMessages = await translateAllMessages(messages, "en", "es", 60312);
+        let translatedMessage = translatedMessages[0];
+        if (originalMessageID) {
+            const draft = await Front.createDraft({
+                content: {
+                  body: translatedMessage,
+                  type: 'text'
+                },
+                replyOptions: {
+                  type: 'reply',
+                  originalMessageId: originalMessageID
+                }
+            });
+        } else {
+            console.log("No Conversation Selected");
+        }
     } else {
-        console.log("No Conversation Selected");
+        console.log("No message entered");
     }
 }
 
@@ -24098,6 +24102,11 @@ async function translateSingle(apiInstance, message, srclang, trglang, memoryId)
     let translatedMessage = translateData.translation[0].targetWithTags;
     console.log(translatedMessage);
     return translatedMessage;
+}
+
+window.onload = function() {
+    var btn = document.getElementById("sendButton");
+    btn.onclick = sendTranslatedMessage;
 }
 },{"@frontapp/plugin-sdk":1,"lilt-node":25,"rxjs/internal/observable/ConnectableObservable":104}],295:[function(require,module,exports){
 'use strict'
