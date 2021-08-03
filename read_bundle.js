@@ -24003,6 +24003,7 @@ Front.contextUpdates.subscribe(context => {
         break;
       case 'singleConversation':
         console.log("Single Conversation");
+        document.getElementById("translatedText").innerHTML = "Loading...";
         listAllMessages(context);
         break;
       case 'multiConversations':
@@ -24045,6 +24046,7 @@ async function listAllMessages(context) {
         for (let index = 0; index < tags.length; index++) {
             translatedInner = translatedInner.concat(tags[index]);
             translatedInner = translatedInner.concat(translatedMessages[index + 1]);
+            translatedInner = translatedInner.concat(" ");
         }
         document.getElementById("translatedText").innerHTML = translatedInner;
         console.log(inner);

@@ -24033,7 +24033,7 @@ async function setMessageID(context) {
             messages.push(...results);
         }
 
-        originalMessageID = results[results.length - 1].id;
+        originalMessageID = messages[messages.length - 1].id;
 
     } catch (error) {
         if (Front.isCancelError(error)) {
