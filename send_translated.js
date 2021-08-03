@@ -5,6 +5,7 @@ var LiltNode = require('lilt-node');
 const { connectableObservableDescriptor } = require('rxjs/internal/observable/ConnectableObservable');
 
 let originalMessageID = undefined;
+let frontContext = undefined;
 
 Front.contextUpdates.subscribe(context => {
     switch(context.type) {
@@ -14,6 +15,7 @@ Front.contextUpdates.subscribe(context => {
       case 'singleConversation':
         console.log("Single Conversation");
         setMessageID(context);
+        frontContext = context;
         break;
       case 'multiConversations':
         console.log('Multiple conversations selected', context.conversations);
@@ -56,8 +58,8 @@ async function sendTranslatedMessage() {
         messages.push(originalMessage);
         let translatedMessages = await translateAllMessages(messages, "en", "es", 60312);
         let translatedMessage = translatedMessages[0];
-        if (originalMessageID) {
-            const draft = await Front.createDraft({
+        if (originalMessageID && frontContext) {
+            const draft = await frontContext.createDraft({
                 content: {
                   body: translatedMessage,
                   type: 'text'
