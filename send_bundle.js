@@ -24006,7 +24006,7 @@ Front.contextUpdates.subscribe(context => {
         break;
       case 'singleConversation':
         console.log("Single Conversation");
-        setMessageID();
+        setMessageID(context);
         break;
       case 'multiConversations':
         console.log('Multiple conversations selected', context.conversations);
@@ -24017,14 +24017,14 @@ Front.contextUpdates.subscribe(context => {
     }
   });
 
-async function setMessageID() {
+async function setMessageID(context) {
     const source = Front.buildCancelTokenSource();
     // Do not wait more than 500ms for the list of messages.
     setTimeout(() => source.cancel(), 500);
     try {
         const list = await context.listMessages(undefined, source.token);
 
-        let nextPageToken = list.token
+        let nextPageToken = list.token;
         const messages = list.results;
 
         while (nextPageToken) {
