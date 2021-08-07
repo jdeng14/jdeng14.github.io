@@ -17,9 +17,9 @@ try {
     let apiInstance = new LiltNode.RootApi();
     apiInstance.root().then((data) => {
         console.log('API called successfully. Returned data: ' + data);
-        window.sessionStorage.setItem("APIKEY", APIKey);
-        console.log("Successfully stored API Key")
-        window.location.href = "home.html";
+        window.localStorage.setItem("LILTAPIKEY", APIKey);
+        console.log("Successfully stored API Key");
+        window.location.href = "settings.html";
     }, (error) => {
         console.error(error);
         document.getElementById("errorMessage").innerHTML = "Invalid API Key";

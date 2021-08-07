@@ -55,6 +55,7 @@ body {
   font-family: 'Flama', Arial, Helvetica, sans-serif;
   font-size: 30px;
   left: 100%;
+  text-align: center;
 }
 
 .center {
@@ -64,4 +65,17 @@ body {
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+.backButton {
+  padding: 20;
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  color: white;
+  font-size: 18px;
+  font-family: 'Flama', Arial, Helvetica, sans-serif;
 }

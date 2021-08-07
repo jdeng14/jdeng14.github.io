@@ -24065,7 +24065,11 @@ async function translateAllMessages(messages, srclang, trglang, memoryId) {
     // Configure API key authorization: ApiKeyAuth
     let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
     // let APIKey = window.sessionStorage.getItem("APIKEY");
-    let APIKey = "2b6d066afe38cf67ff04e0c0f6c2b674";
+    let APIKey = window.localStorage.getItem("LILTAPIKEY");
+    if (!APIKey) {
+        console.log("No API Key Found");
+        return;
+    }
     ApiKeyAuth.apiKey = APIKey;
     // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
     // ApiKeyAuth.apiKeyPrefix = 'Token';

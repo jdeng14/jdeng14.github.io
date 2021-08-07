@@ -4,7 +4,7 @@
 }
 
 .header {
-    padding: 60px;
+    padding: 20px;
     text-align: center;
     background: #2F25B6;
     color: white;
@@ -60,7 +60,8 @@
 
 .selectLabel {
   font-size: 24px;
-  color: white
+  color: white;
+  font-family: 'Flama', Arial, Helvetica, sans-serif;
 }
 
 .backButton {

@@ -1,0 +1,75 @@
+@font-face {
+    font-family: 'Flama';
+    src:  url('fonts/Flama-Book.a61600d.woff2') format('woff2');
+  }
+  
+  .header {
+      padding: 20px;
+      text-align: center;
+      background: #2F25B6;
+      color: white;
+      font-size: 30px;
+    }
+  
+  .backButton {
+    padding: 20;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    color: white;
+    font-size: 24px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+  }
+
+.alignLeft {
+    float: left;
+    padding: 50;
+    color: white;
+    font-size: 24px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+}
+
+.alignRight {
+	float: right;
+    padding: 50;
+    color: white;
+    font-size: 24px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+}
+
+.divAlignLeft {
+    float: left;
+    margin-left: 30px;
+    margin-top: 30px;
+}
+
+.divAlignRight {
+    float: right;
+    margin-right: 30px;
+    margin-top: 30px;
+}
+
+.settingLabel {
+    color: white;
+    font-size: 18px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+}
+
+.settingValue {
+    color: white;
+    font-size: 18px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+    margin-right: 10px;
+}
+  
+.APIEdit {
+    font-size: 18px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: #2F25B6;
+}

@@ -1,0 +1,41 @@
+
+<html>
+    <head>
+      <link rel="stylesheet" type="text/css" href="index.css" />
+      <script type="text/javascript" src="API_bundle.js"></script>
+    </head>
+    <body>
+      <div class="plugin-div">
+        <input type="button" class="backButton" onclick="location.href='settings.html';" value="Back" />
+          <div class="header">
+              <img src="images/logo-white.svg" alt="Lilt">
+          </div>
+          <div class="container">
+              <div class="center">
+                  <p class="APIInputText">Enter API Key: </p>
+              </div>
+          </div>
+          <div class="container">
+              <div class="center">
+                  <input name="APIKeyInput" type="text" maxlength="512" id="APIKeyInput" class="APIKeyInput"/><br>
+              </div>
+          </div>
+          <div class="container">
+              <div class="center">
+                  <input type="button" id="APIKeySubmit" value="Submit" class="button"><br>
+                  <script type="text/javascript">
+                      var submitButton = document.getElementById('APIKeySubmit'); 
+                      submitButton.onclick = function(){
+                          var script = document.createElement("script");
+                          script.type = "text/javascript";
+                          script.src = "API_bundle.js"; 
+                          document.getElementsByTagName("head")[0].appendChild(script);
+                          return false;
+                      }
+                  </script>
+                  <p class="error" id="errorMessage"></p>
+              </div>
+          </div>
+      </div>
+    </body>
+  </html>
