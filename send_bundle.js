@@ -24101,7 +24101,7 @@ async function translateAllMessages(messages, srclang, trglang, memoryId) {
 }
 
 async function translateSingle(apiInstance, message, srclang, trglang, memoryId) {
-    if (messages[index] !== "") {
+    if (message !== "") {
         let registerData = await apiInstance.registerSegment(message, srclang, trglang);
         let opts = {
             'source': message, // String | The source text to be translated.
@@ -24115,6 +24115,38 @@ async function translateSingle(apiInstance, message, srclang, trglang, memoryId)
         return "";
     }
 }
+
+// function getInstantTranslationTagID() {
+//     const source = Front.buildCancelTokenSource();
+//     // Do not wait more than 500ms for the list of messages.
+//     setTimeout(() => source.cancel(), 500);
+//     try {
+//         const list = await Front.listTags(undefined, source.token);
+
+//         let nextPageToken = list.token;
+//         const tags = list.results;
+
+//         while (nextPageToken) {
+//             const {results, token} = await Front.listTags(nextPageToken);
+//             nextPageToken = token;
+//             tags.push(...results);
+//         }
+
+//         for (let index = 0; index < tags.length; index++) {
+//             if (tags[index].name == "Instant Translation") {
+//                 return list[index].id;
+//             }
+//         }
+
+//         return null;
+
+//     } catch (error) {
+//         if (Front.isCancelError(error)) {
+//             return; // Do nothing.
+//         }
+//         throw error;
+//     }
+// }
 
 window.onload = function() {
     var btn = document.getElementById("sendButton");
