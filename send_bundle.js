@@ -24089,28 +24089,31 @@ async function translateAllMessages(messages, srclang, trglang, memoryId) {
 
     let apiInstance = new LiltNode.TranslateApi();
 
-    let translatedMessages = []
+    let promises = []
+
     for (let index = 0; index < messages.length; index++) {
-        if (messages[index] !== "") {
-            let translated = await translateSingle(apiInstance, messages[index], srclang, trglang, memoryId);
-            translatedMessages.push(translated);
-        } else {
-            translatedMessages.push("")
-        }
+        let promise = translateSingle(apiInstance, messages[index], srclang, trglang, memoryId);
+        promises.push(promise);
     }
+
+    let translatedMessages = await Promise.all(promises);
     return translatedMessages;
 }
 
 async function translateSingle(apiInstance, message, srclang, trglang, memoryId) {
-    let registerData = await apiInstance.registerSegment(message, srclang, trglang);
-    let opts = {
-        'source': message, // String | The source text to be translated.
-        'sourceHash': registerData.source_hash, // Number | A source hash code.
-        };
-    let translateData = await apiInstance.translateSegment(memoryId, opts);
-    let translatedMessage = translateData.translation[0].targetWithTags;
-    console.log(translatedMessage);
-    return translatedMessage;
+    if (messages[index] !== "") {
+        let registerData = await apiInstance.registerSegment(message, srclang, trglang);
+        let opts = {
+            'source': message, // String | The source text to be translated.
+            'sourceHash': registerData.source_hash, // Number | A source hash code.
+            };
+        let translateData = await apiInstance.translateSegment(memoryId, opts);
+        let translatedMessage = translateData.translation[0].targetWithTags;
+        console.log(translatedMessage);
+        return translatedMessage;
+    } else {
+        return "";
+    }
 }
 
 window.onload = function() {
