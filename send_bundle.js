@@ -24047,14 +24047,17 @@ async function setMessageID(context) {
 async function sendTranslatedMessage() {
     let originalMessage = document.getElementById("messageInput").value;
     if (originalMessage) {
-        let messages = []
-        messages.push(originalMessage);
-        let translatedMessages = await translateAllMessages(messages, "en", "es", 60312);
-        let translatedMessage = translatedMessages[0];
+        let messages_arr = originalMessage.split("\n")
+        let translatedMessages = await translateAllMessages(messages_arr, "en", "es", 60312);
+        let finalMessage = ""
+        for (let index = 0; index < translatedMessages.length; index++) {
+            finalMessage = finalMessage.concat(translatedMessages[index]);
+            finalMessage = finalMessage.concat("\n");
+        }
         if (originalMessageID && frontContext) {
             const draft = await frontContext.createDraft({
                 content: {
-                  body: translatedMessage,
+                  body: finalMessage,
                   type: 'text'
                 },
                 replyOptions: {
@@ -24088,8 +24091,12 @@ async function translateAllMessages(messages, srclang, trglang, memoryId) {
 
     let translatedMessages = []
     for (let index = 0; index < messages.length; index++) {
-        let translated = await translateSingle(apiInstance, messages[index], srclang, trglang, memoryId);
-        translatedMessages.push(translated);
+        if (messages[index] !== "") {
+            let translated = await translateSingle(apiInstance, messages[index], srclang, trglang, memoryId);
+            translatedMessages.push(translated);
+        } else {
+            translatedMessages.push("")
+        }
     }
     return translatedMessages;
 }
