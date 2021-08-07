@@ -24066,7 +24066,7 @@ async function sendTranslatedMessage() {
                 }
             });
 
-            instantTranslationTagID = await getInstantTranslationTagID();
+            let instantTranslationTagID = await getInstantTranslationTagID();
             if (instantTranslationTagID) {
                 await frontContext.tag([instantTranslationTagID], undefined);
             }
