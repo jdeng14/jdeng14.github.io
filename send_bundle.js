@@ -24065,6 +24065,11 @@ async function sendTranslatedMessage() {
                   originalMessageId: originalMessageID
                 }
             });
+
+            instantTranslationTagID = await getInstantTranslationTagID();
+            if (instantTranslationTagID) {
+                await frontContext.tag([instantTranslationTagID], undefined);
+            }
         } else {
             console.log("No Conversation Selected");
         }
@@ -24116,37 +24121,39 @@ async function translateSingle(apiInstance, message, srclang, trglang, memoryId)
     }
 }
 
-// function getInstantTranslationTagID() {
-//     const source = Front.buildCancelTokenSource();
-//     // Do not wait more than 500ms for the list of messages.
-//     setTimeout(() => source.cancel(), 500);
-//     try {
-//         const list = await Front.listTags(undefined, source.token);
+async function getInstantTranslationTagID() {
+    const source = Front.buildCancelTokenSource();
+    // Do not wait more than 500ms for the list of messages.
+    setTimeout(() => source.cancel(), 500);
+    try {
+        const list = await frontContext.listTags(undefined, undefined);
 
-//         let nextPageToken = list.token;
-//         const tags = list.results;
+        let nextPageToken = list.token;
+        const tags = list.results;
 
-//         while (nextPageToken) {
-//             const {results, token} = await Front.listTags(nextPageToken);
-//             nextPageToken = token;
-//             tags.push(...results);
-//         }
+        while (nextPageToken) {
+            const {results, token} = await frontContext.listTags(nextPageToken);
+            nextPageToken = token;
+            tags.push(...results);
+        }
 
-//         for (let index = 0; index < tags.length; index++) {
-//             if (tags[index].name == "Instant Translation") {
-//                 return list[index].id;
-//             }
-//         }
+        for (let index = 0; index < tags.length; index++) {
+            console.log(tags[index].name);
+            if (tags[index].name === "Instant Translation") {
+                console.log(tags[index].id);
+                return tags[index].id;
+            }
+        }
 
-//         return null;
+        return null;
 
-//     } catch (error) {
-//         if (Front.isCancelError(error)) {
-//             return; // Do nothing.
-//         }
-//         throw error;
-//     }
-// }
+    } catch (error) {
+        if (Front.isCancelError(error)) {
+            return; // Do nothing.
+        }
+        throw error;
+    }
+}
 
 window.onload = function() {
     var btn = document.getElementById("sendButton");
