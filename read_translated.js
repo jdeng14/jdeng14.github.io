@@ -5,7 +5,7 @@ var LiltNode = require('lilt-node');
 const { connectableObservableDescriptor } = require('rxjs/internal/observable/ConnectableObservable');
 
 let memoriesDict = {};
-let frontContext = null;
+let frontContext = undefined;
 
 Front.contextUpdates.subscribe(context => {
     switch(context.type) {
@@ -168,7 +168,9 @@ $(document).on('change', 'input', function(){
                 let src = translateInfo[0];
                 let trg = translateInfo[1];
                 let memoryID = translateInfo[2];
-                displayAllMessages(frontContext, src, trg, memoryID);
+                if (frontContext) {
+                    displayAllMessages(frontContext, src, trg, memoryID);
+                }
             }
        }
     }
