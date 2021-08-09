@@ -2,6 +2,8 @@
 
 var LiltNode = require('lilt-node');
 
+let nameToCode = {};
+
 let defaultClient = LiltNode.ApiClient.instance;
 // Configure API key authorization: ApiKeyAuth
 let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
@@ -17,23 +19,30 @@ let BasicAuth = defaultClient.authentications['BasicAuth'];
 BasicAuth.username = APIKey;
 BasicAuth.password = APIKey;
 
-// let apiInstance = new LiltNode.LanguagesApi();
-// apiInstance.getLanguages().then((languageResponse) => {
-//     let languages = Object.values(languageResponse.code_to_name);
-//     let options = ""
-//     for (let index = 0; index < languages.length; index++) {
-//         options += '<option value="' + languages[index] + '">';
-//     }
-//     console.log(options);
-//     document.getElementById('languages').innerHTML = options;
-// }, (error) => {
-//     console.error(error);
-// });
+let apiInstance = new LiltNode.LanguagesApi();
+apiInstance.getLanguages().then((languageResponse) => {
+    let languages = Object.values(languageResponse.code_to_name);
+    for (let key in languages) {
+        nameToCode[languages[key]] = key;
+    }
 
-let apiInstance = new LiltNode.MemoriesApi();
-apiInstance.getMemory().then((data) => {
-  console.log(data);
+    let options = ""
+    for (let index = 0; index < languages.length; index++) {
+        options += '<option value="' + languages[index] + '">';
+    }
+    console.log(options);
+    document.getElementById('languages').innerHTML = options;
 }, (error) => {
-  console.error(error);
+    console.error(error);
 });
+
+async function listMemories() {
+    //get source
+    //get target
+
+    let apiInstance = new LiltNode.MemoriesApi();
+    let memories = await apiInstance.getMemory();
+
+    //iterate through memories to find source and target
+}
 

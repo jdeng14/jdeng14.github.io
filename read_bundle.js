@@ -23998,7 +23998,6 @@ var LiltNode = require('lilt-node');
 const { connectableObservableDescriptor } = require('rxjs/internal/observable/ConnectableObservable');
 
 let memoriesDict = {};
-let frontContext = undefined;
 
 Front.contextUpdates.subscribe(context => {
     switch(context.type) {
@@ -24007,7 +24006,11 @@ Front.contextUpdates.subscribe(context => {
         break;
       case 'singleConversation':
         console.log("Single Conversation");
-        frontContext = context;
+        let option = document.getElementById('languageChoice');
+        if (option in memoriesDict) {
+            let translateInfo = memoriesDict[option];
+            displayAllMessages(context, translateInfo[0], translateInfo[1], translateInfo[2]);
+        } 
         break;
       case 'multiConversations':
         console.log('Multiple conversations selected', context.conversations);
@@ -24149,25 +24152,6 @@ async function setLanguagePairs() {
 }
 
 setLanguagePairs();
-
-$(document).on('change', 'input', function(){
-    var options = $('datalist')[0].options;
-    var val = $(this).val();
-    for (var i=0;i<options.length;i++){
-       if (options[i].value === val) {
-            let option = $(this).val();
-            if (option in memoriesDict) {
-                let translateInfo = memoriesDict[option];
-                let src = translateInfo[0];
-                let trg = translateInfo[1];
-                let memoryID = translateInfo[2];
-                if (frontContext) {
-                    displayAllMessages(frontContext, src, trg, memoryID);
-                }
-            }
-       }
-    }
-});
 },{"@frontapp/plugin-sdk":1,"lilt-node":25,"rxjs/internal/observable/ConnectableObservable":104}],295:[function(require,module,exports){
 'use strict'
 
