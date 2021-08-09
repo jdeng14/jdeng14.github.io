@@ -2,8 +2,8 @@
     <head>
         <link rel="stylesheet" type="text/css" href="read.css" />
         <!-- <script type="text/javascript" src="//dl.frontapp.com/libs/plugin-sdk-1.0.1.min.js"></script> -->
-        <script type="text/javascript" src="read_bundle.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script type="text/javascript" src="read_bundle.js"></script>
     </head>
     <body>
         <input type="button" class="backButton" onclick="location.href='index.html';" value="Back" />
@@ -13,24 +13,9 @@
 
         <p class="boxTitle">Translated Message:</p>
         <div class="languageSelector">
-            <label for="targetChoice" class="selectLabel">Select Target Language:</label>
-            <input list="targetLanguages" id="targetChoice" name="targetChoice" />
-            <datalist id="targetLanguages" style="overflow-y: auto!important">
-                <option value="English">
-                <option value="Spanish">
-                <option value="German">
-                <option value="French">
-                <option value="Russian">
-                <option value="English">
-                <option value="Spanish">
-                <option value="German">
-                <option value="French">
-                <option value="Russian">
-                <option value="English">
-                <option value="Spanish">
-                <option value="German">
-                <option value="French">
-                <option value="Russian">
+            <label for="targetChoice" class="selectLabel">Select Language Pairing:</label>
+            <input list="languages" id="languageChoice" name="languageChoice" class="languageChoice"/>
+            <datalist id="languages" style="overflow-y: auto!important">
             </datalist>
         </div>
     

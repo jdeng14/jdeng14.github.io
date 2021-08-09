@@ -59,8 +59,16 @@
 }
 
 .selectLabel {
-  font-size: 24px;
+  font-size: 18px;
   color: white;
+  font-family: 'Flama', Arial, Helvetica, sans-serif;
+}
+
+.languageChoice {
+  width: 200px;
+  /* padding: 30px; */
+  margin-left: 0px;;
+  margin-top: 20px;
   font-family: 'Flama', Arial, Helvetica, sans-serif;
 }
 

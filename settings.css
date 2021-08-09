@@ -44,18 +44,41 @@
     float: left;
     margin-left: 30px;
     margin-top: 30px;
+    overflow: hidden;
 }
 
 .divAlignRight {
     float: right;
     margin-right: 30px;
     margin-top: 30px;
+    overflow: hidden;
+}
+
+.left {
+    float: left;
+    color: white;
+    font-size: 18px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+    margin-left: 20px;
+ }
+
+.right {
+    float: right;
+    color: white;
+    font-size: 18px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+    margin-right: 20px;
+ }
+
+p {
+    overflow: hidden;
 }
 
 .settingLabel {
     color: white;
     font-size: 18px;
     font-family: 'Flama', Arial, Helvetica, sans-serif;
+    overflow: hidden;
 }
 
 .settingValue {
@@ -63,12 +86,43 @@
     font-size: 18px;
     font-family: 'Flama', Arial, Helvetica, sans-serif;
     margin-right: 10px;
+    overflow: hidden;
 }
   
 .APIEdit {
     font-size: 18px;
     font-family: 'Flama', Arial, Helvetica, sans-serif;
+    float: right;
+    margin-right: 20px;
 }
+
+.sourceLanguageSelector {
+    margin-left: 20px;
+    width: 150px;
+}
+
+.targetLanguageSelector {
+    margin-right: 110px;
+    float:right;
+    width: 150px;
+}
+
+.container {
+    height: 600px;
+    position: relative;
+    background-color: white;
+    margin: 40;
+    border-radius: 12px;
+  }
+
+  .center {
+    margin: 30;
+    position: absolute;
+    /* top: 5%;
+    left: 5%; */
+    /* -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
+  }
 
 body {
     background-color: #2F25B6;

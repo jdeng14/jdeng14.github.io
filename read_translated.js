@@ -1,7 +1,11 @@
 "use strict";
 
 var Front = require('@frontapp/plugin-sdk');
-var LiltNode = require('lilt-node')
+var LiltNode = require('lilt-node');
+const { connectableObservableDescriptor } = require('rxjs/internal/observable/ConnectableObservable');
+
+let memoriesDict = {};
+let frontContext = null;
 
 Front.contextUpdates.subscribe(context => {
     switch(context.type) {
@@ -10,8 +14,7 @@ Front.contextUpdates.subscribe(context => {
         break;
       case 'singleConversation':
         console.log("Single Conversation");
-        document.getElementById("translatedText").innerHTML = "Loading...";
-        listAllMessages(context);
+        frontContext = context;
         break;
       case 'multiConversations':
         console.log('Multiple conversations selected', context.conversations);
@@ -23,7 +26,7 @@ Front.contextUpdates.subscribe(context => {
   });
 
 
-async function listAllMessages(context) {
+async function displayAllMessages(context, src, trg, memoryID) {
     const source = Front.buildCancelTokenSource();
     // Do not wait more than 500ms for the list of messages.
     setTimeout(() => source.cancel(), 500);
@@ -46,7 +49,7 @@ async function listAllMessages(context) {
         }
         document.getElementById("originalText").innerHTML = inner;
         let messages_arr = inner.split(/<[^>]*>/)
-        let translatedMessages = await translateAllMessages(messages_arr, "en", "es", 60312);
+        let translatedMessages = await translateAllMessages(messages_arr, src, trg, memoryID);
         let tags = inner.match(/<[^>]*>/gi);
         let translatedInner = translatedMessages[0];
 
@@ -107,9 +110,66 @@ async function translateSingle(apiInstance, message, srclang, trglang, memoryId)
             };
         let translateData = await apiInstance.translateSegment(memoryId, opts);
         let translatedMessage = translateData.translation[0].targetWithTags;
-        console.log(translatedMessage);
         return translatedMessage;
     } else {
         return "";
     }
 }
+
+async function setLanguagePairs() {
+    let defaultClient = LiltNode.ApiClient.instance;
+    // Configure API key authorization: ApiKeyAuth
+    let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
+    // let APIKey = window.localStorage.getItem("LILTAPIKEY");
+    let APIKey = "2b6d066afe38cf67ff04e0c0f6c2b674";
+    if (!APIKey) {
+        console.log("No API Key Found");
+        return;
+    }
+    ApiKeyAuth.apiKey = APIKey;
+    let BasicAuth = defaultClient.authentications['BasicAuth'];
+    BasicAuth.username = APIKey;
+    BasicAuth.password = APIKey;
+
+    let apiMemoryInstance = new LiltNode.MemoriesApi();
+    let apiLanguageInstance = new LiltNode.LanguagesApi();
+
+    let memories = await apiMemoryInstance.getMemory();
+    let languages = await apiLanguageInstance.getLanguages();
+    let dict = languages.code_to_name;
+
+    let languagePairs = new Set();
+    for (let i = 0; i < memories.length; i++) {
+        let memory = memories[i];
+        let src = dict[memory.srclang];
+        let trg = dict[memory.trglang];
+        languagePairs.add(src + " to " + trg);
+        memoriesDict[src + " to " + trg] = [memory.srclang, memory.trglang, memory.id];
+    }
+
+    let options = ""
+    for (let pair of languagePairs) {
+        options += '<option value="' + pair + '" />';
+    }
+
+    document.getElementById('languages').innerHTML = options;
+}
+
+setLanguagePairs();
+
+$(document).on('change', 'input', function(){
+    var options = $('datalist')[0].options;
+    var val = $(this).val();
+    for (var i=0;i<options.length;i++){
+       if (options[i].value === val) {
+            let option = $(this).val();
+            if (option in memoriesDict) {
+                let translateInfo = memoriesDict[option];
+                let src = translateInfo[0];
+                let trg = translateInfo[1];
+                let memoryID = translateInfo[2];
+                displayAllMessages(frontContext, src, trg, memoryID);
+            }
+       }
+    }
+});

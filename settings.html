@@ -1,37 +1,53 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="settings.css" />
-        <script type="text/javascript" src="read_bundle.js"></script>
+        <script type="text/javascript" src="settings_bundle.js"></script>
     </head>
     <body>
         <input type="button" class="backButton" onclick="location.href='index.html';" value="Back" />
         <div class="header">
             <img src="images/logo-white.svg" alt="Lilt">
         </div>
-
-        <div class="APIKey">
-            <div class="divAlignLeft">
-                <span class="settingLabel">API Key:</span>
-            </div>
-            <div class="divAlignRight">
-                <span class="settingValue" id="APIKeySpan"></span>
-                <script type="text/javascript">
-                    window.onload = function() {
-                        try {
-                            let key = window.localStorage.getItem("LILTAPIKEY");
-                            console.log(key);
-                            document.getElementById("APIKeySpan").innerHTML = key;
-                        } catch (error) {
-                            console.log(error);
-                        }
-                    };
-                </script>
-                <button id="APIEdit" class="APIEdit">Edit</button>
-                <script type="text/javascript">
-                    document.getElementById("APIEdit").onclick = function () {
-                        location.href = "apikey.html";
-                    };
-                </script>
+        <div>  
+            <p><span class='left'>APIKey:</span><button id="APIEdit" class="APIEdit">Edit</button><span class='right' id='APIKeySpan'></span></p>
+            <p><span class='left'>Memories:</span></p>
+            <p>
+                <span class='left'>Source Language</span>
+                <button id="APIEdit" class="APIEdit">Search</button>
+                <span class='right'>Target Language</span>
+            </p>
+            <p>
+                <input list="languages" id="sourceChoice" name="sourceChoice" class="sourceLanguageSelector"/>
+                <datalist id="languages" style="overflow-y: auto!important">
+                    <option value="English">
+                    <option value="Spanish">
+                    <option value="German">
+                    <option value="French">
+                    <option value="Russian">
+                </datalist>
+                <input list="languages" id="targetChoice" name="targetChoice" class="targetLanguageSelector"/>
+            </p>
+            
+            <script type="text/javascript">
+                window.onload = function() {
+                    try {
+                        let key = window.localStorage.getItem("LILTAPIKEY");
+                        console.log(key);
+                        document.getElementById("APIKeySpan").innerHTML = key;
+                    } catch (error) {
+                        console.log(error);
+                    }
+                };
+            </script>
+            <script type="text/javascript">
+                document.getElementById("APIEdit").onclick = function () {
+                    location.href = "apikey.html";
+                };
+            </script>
+        </div>     
+        <div class="container">
+            <div class="center">
+                <p id="memories" class="textBox"></p>
             </div>
         </div>
     </body>
