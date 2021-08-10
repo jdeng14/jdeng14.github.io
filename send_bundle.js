@@ -24049,7 +24049,12 @@ async function sendTranslatedMessage() {
     let originalMessage = document.getElementById("messageInput").value;
     if (originalMessage) {
         let messages_arr = originalMessage.split("\n")
-        let translatedMessages = await translateAllMessages(messages_arr, "en", "es", 60312);
+        let option = document.getElementById('languageChoice').value;
+        if (option in memoriesDict) {
+            console.log("No Option Selected");
+        } 
+        let translateInfo = memoriesDict[option];
+        let translatedMessages = await translateAllMessages(messages_arr, translateInfo[0], translateInfo[1], translateInfo[2]);
         let finalMessage = ""
         for (let index = 0; index < translatedMessages.length; index++) {
             finalMessage = finalMessage.concat(translatedMessages[index]);

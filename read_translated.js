@@ -16,7 +16,6 @@ Front.contextUpdates.subscribe(context => {
         console.log("Single Conversation");
         frontContext = context;
         let option = document.getElementById('languageChoice').value;
-        console.log(option);
         if (option in memoriesDict) {
             let translateInfo = memoriesDict[option];
             displayAllMessages(context, translateInfo[0], translateInfo[1], translateInfo[2]);
