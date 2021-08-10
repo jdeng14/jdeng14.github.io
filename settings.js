@@ -3,6 +3,7 @@
 var LiltNode = require('lilt-node');
 
 let nameToCode = {};
+let source_to_target = {};
 
 let defaultClient = LiltNode.ApiClient.instance;
 // Configure API key authorization: ApiKeyAuth
@@ -21,9 +22,11 @@ BasicAuth.password = APIKey;
 
 let apiInstance = new LiltNode.LanguagesApi();
 apiInstance.getLanguages().then((languageResponse) => {
+    source_to_target = languageResponse.source_to_target;
+
     let languages = Object.values(languageResponse.code_to_name);
-    for (let key in languages) {
-        nameToCode[languages[key]] = key;
+    for (let key in languageResponse.code_to_name) {
+        nameToCode[languageResponse.code_to_name[key]] = key;
     }
 
     let options = ""
@@ -37,12 +40,57 @@ apiInstance.getLanguages().then((languageResponse) => {
 });
 
 async function listMemories() {
-    //get source
-    //get target
+    //get source code
+    let sourceString = document.getElementById('sourceChoice').value;
+    if (!sourceString in nameToCode) {
+        console.log("Invalid Source Language");
+        return;
+    }
+    let sourceCode = nameToCode[sourceString];
+    //get target code
+    let targetString = document.getElementById('targetChoice').value;
+    if (!targetString in nameToCode) {
+        console.log("Invalid Target Language");
+        return;
+    }
+    let targetCode = nameToCode[targetString];
+
+    if (!source_to_target[sourceCode][targetCode]) {
+        console.log("Unsupported Language Pairing");
+        return;
+    }
 
     let apiInstance = new LiltNode.MemoriesApi();
     let memories = await apiInstance.getMemory();
 
-    //iterate through memories to find source and target
+    for (let index = 0; index < memories.length; index++) {
+        if (memories[index].srclang === sourceCode && memories[index].trglang === targetCode) {
+            console.log(memories[index]);
+            return;
+        }
+    }
+    console.log("No Memory Found");
 }
+
+// Set search button to find memory
+window.onload = function() {
+    var btn = document.getElementById("languageSearch");
+    btn.onclick = listMemories;
+}
+
+window.onload = function() {
+    try {
+        let key = window.localStorage.getItem("LILTAPIKEY");
+        console.log(key);
+        document.getElementById("APIKeySpan").innerHTML = key;
+
+        document.getElementById("searchButton").onclick = listMemories;
+
+        document.getElementById("APIEdit").onclick = function () {
+            location.href = "apikey.html";
+        };
+    } catch (error) {
+        console.log(error);
+    }
+};
 

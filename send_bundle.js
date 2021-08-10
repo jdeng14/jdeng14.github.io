@@ -23998,6 +23998,7 @@ var LiltNode = require('lilt-node');
 const { connectableObservableDescriptor } = require('rxjs/internal/observable/ConnectableObservable');
 
 let originalMessageID = undefined;
+let memoriesDict = {};
 let frontContext = undefined;
 
 Front.contextUpdates.subscribe(context => {
@@ -24155,6 +24156,46 @@ async function getInstantTranslationTagID() {
         throw error;
     }
 }
+
+async function setLanguagePairs() {
+    let defaultClient = LiltNode.ApiClient.instance;
+    // Configure API key authorization: ApiKeyAuth
+    let ApiKeyAuth = defaultClient.authentications['ApiKeyAuth'];
+    let APIKey = window.localStorage.getItem("LILTAPIKEY");
+    if (!APIKey) {
+        console.log("No API Key Found");
+        return;
+    }
+    ApiKeyAuth.apiKey = APIKey;
+    let BasicAuth = defaultClient.authentications['BasicAuth'];
+    BasicAuth.username = APIKey;
+    BasicAuth.password = APIKey;
+
+    let apiMemoryInstance = new LiltNode.MemoriesApi();
+    let apiLanguageInstance = new LiltNode.LanguagesApi();
+
+    let memories = await apiMemoryInstance.getMemory();
+    let languages = await apiLanguageInstance.getLanguages();
+    let dict = languages.code_to_name;
+
+    let languagePairs = new Set();
+    for (let i = 0; i < memories.length; i++) {
+        let memory = memories[i];
+        let src = dict[memory.srclang];
+        let trg = dict[memory.trglang];
+        languagePairs.add(src + " to " + trg);
+        memoriesDict[src + " to " + trg] = [memory.srclang, memory.trglang, memory.id];
+    }
+
+    let options = ""
+    for (let pair of languagePairs) {
+        options += '<option value="' + pair + '" />';
+    }
+
+    document.getElementById('languages').innerHTML = options;
+}
+
+setLanguagePairs();
 
 window.onload = function() {
     var btn = document.getElementById("sendButton");

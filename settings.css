@@ -3,26 +3,26 @@
     src:  url('fonts/Flama-Book.a61600d.woff2') format('woff2');
   }
   
-  .header {
-      padding: 20px;
-      text-align: center;
-      background: #2F25B6;
-      color: white;
-      font-size: 30px;
-    }
-  
-  .backButton {
-    padding: 20;
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
+.header {
+    padding: 20px;
+    text-align: center;
+    background: #2F25B6;
     color: white;
-    font-size: 24px;
-    font-family: 'Flama', Arial, Helvetica, sans-serif;
-  }
+    font-size: 30px;
+}
+  
+.backButton {
+padding: 20;
+background-color: Transparent;
+background-repeat:no-repeat;
+border: none;
+cursor:pointer;
+overflow: hidden;
+outline:none;
+color: white;
+font-size: 18px;
+font-family: 'Flama', Arial, Helvetica, sans-serif;
+}
 
 .alignLeft {
     float: left;
@@ -89,7 +89,7 @@ p {
     overflow: hidden;
 }
   
-.APIEdit {
+.spanButton {
     font-size: 18px;
     font-family: 'Flama', Arial, Helvetica, sans-serif;
     float: right;
