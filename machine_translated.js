@@ -110,7 +110,7 @@ async function sendTranslatedMessage() {
             console.log("No Option Selected");
         } 
         let translateInfo = memoriesDict[option];
-        let translatedMessages = await translateAllMessages(messages_arr, translateInfo[0], translateInfo[1], translateInfo[2]);
+        let translatedMessages = await translateAllMessages(messages_arr, translateInfo[1], translateInfo[0], translateInfo[2]);
         let finalMessage = ""
         for (let index = 0; index < translatedMessages.length; index++) {
             finalMessage = finalMessage.concat(translatedMessages[index]);
