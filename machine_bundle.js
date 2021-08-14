@@ -80,7 +80,6 @@ async function displayAllMessages(context, src, trg, memoryID) {
             console.log(messages[index]);
             inner = inner.concat(messages[index].content.body);
         }
-        document.getElementById("originalText").innerHTML = inner;
         let messages_arr = inner.split(/<[^>]*>/)
         let translatedMessages = await translateAllMessages(messages_arr, src, trg, memoryID);
         let tags = inner.match(/<[^>]*>/gi);
