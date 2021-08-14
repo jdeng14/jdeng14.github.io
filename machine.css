@@ -34,6 +34,13 @@
     transform: translate(-50%, -50%); */
   }
 
+  .sendCenter {
+    margin: 30;
+    height: 600px;
+    background-color: white;
+    border-radius: 12px;
+  }
+
 .textBox {
     color: #071B5A;
     font-size: 20px;
@@ -87,4 +94,48 @@
 
 body {
     background-color: #2F25B6;
+}
+
+.button {
+  border: none;
+  color: rgb(7, 27, 90);
+  background-color: #85E8BA;
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 12px;
+  font-family: 'Flama', Arial, Helvetica, sans-serif;
+  height:100px;
+  width:300px;
+  margin:0;
+  display:block;
+}
+
+.buttonCenter {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.buttonContainer {
+  height: 150px;
+  position: relative;
+}
+
+.messageInput {
+  width: 90%;
+  max-width: 90%;
+  height: 95%;
+  max-height: 95%;
+  border: none;
+  outline: none;
+  font-size: 24px;
+  margin: 10;
+  font-family: 'Flama', Arial, Helvetica, sans-serif;
 }

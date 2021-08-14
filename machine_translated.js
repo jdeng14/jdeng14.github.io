@@ -6,6 +6,7 @@ const { connectableObservableDescriptor } = require('rxjs/internal/observable/Co
 
 let memoriesDict = {};
 let frontContext = undefined;
+let originalMessageID = undefined;
 
 Front.contextUpdates.subscribe(context => {
     switch(context.type) {
@@ -14,6 +15,7 @@ Front.contextUpdates.subscribe(context => {
         break;
       case 'singleConversation':
         console.log("Single Conversation");
+        setMessageID(context);
         frontContext = context;
         let option = document.getElementById('languageChoice').value;
         if (option in memoriesDict) {
@@ -30,6 +32,31 @@ Front.contextUpdates.subscribe(context => {
     }
   });
 
+async function setMessageID(context) {
+    const source = Front.buildCancelTokenSource();
+    // Do not wait more than 500ms for the list of messages.
+    setTimeout(() => source.cancel(), 500);
+    try {
+        const list = await context.listMessages(undefined, source.token);
+
+        let nextPageToken = list.token;
+        const messages = list.results;
+
+        while (nextPageToken) {
+            const {results, token} = await context.listMessages(nextPageToken);
+            nextPageToken = token;
+            messages.push(...results);
+        }
+
+        originalMessageID = messages[messages.length - 1].id;
+
+    } catch (error) {
+        if (Front.isCancelError(error)) {
+            return; // Do nothing.
+        }
+        throw error;
+    }
+}
 
 async function displayAllMessages(context, src, trg, memoryID) {
     const source = Front.buildCancelTokenSource();
@@ -66,6 +93,77 @@ async function displayAllMessages(context, src, trg, memoryID) {
         document.getElementById("translatedText").innerHTML = translatedInner;
         console.log(inner);
         console.log(translatedInner);
+
+    } catch (error) {
+        if (Front.isCancelError(error)) {
+            return; // Do nothing.
+        }
+        throw error;
+    }
+}
+
+async function sendTranslatedMessage() {
+    let originalMessage = document.getElementById("messageInput").value;
+    if (originalMessage) {
+        let messages_arr = originalMessage.split("\n")
+        let option = document.getElementById('languageChoice').value;
+        if (option in memoriesDict) {
+            console.log("No Option Selected");
+        } 
+        let translateInfo = memoriesDict[option];
+        let translatedMessages = await translateAllMessages(messages_arr, translateInfo[0], translateInfo[1], translateInfo[2]);
+        let finalMessage = ""
+        for (let index = 0; index < translatedMessages.length; index++) {
+            finalMessage = finalMessage.concat(translatedMessages[index]);
+            finalMessage = finalMessage.concat("\n");
+        }
+        if (originalMessageID && frontContext) {
+            const draft = await frontContext.createDraft({
+                content: {
+                  body: finalMessage,
+                  type: 'text'
+                },
+                replyOptions: {
+                  type: 'reply',
+                  originalMessageId: originalMessageID
+                }
+            });
+
+            let instantTranslationTagID = await getInstantTranslationTagID();
+            if (instantTranslationTagID) {
+                await frontContext.tag([instantTranslationTagID], undefined);
+            }
+        } else {
+            console.log("No Conversation Selected");
+        }
+    } else {
+        console.log("No message entered");
+    }
+}
+
+async function getInstantTranslationTagID() {
+    const source = Front.buildCancelTokenSource();
+    // Do not wait more than 500ms for the list of messages.
+    setTimeout(() => source.cancel(), 500);
+    try {
+        const list = await frontContext.listTags(undefined, undefined);
+
+        let nextPageToken = list.token;
+        const tags = list.results;
+
+        while (nextPageToken) {
+            const {results, token} = await frontContext.listTags(nextPageToken);
+            nextPageToken = token;
+            tags.push(...results);
+        }
+
+        for (let index = 0; index < tags.length; index++) {
+            if (tags[index].name === "Instant Translation") {
+                return tags[index].id;
+            }
+        }
+
+        return null;
 
     } catch (error) {
         if (Front.isCancelError(error)) {
@@ -179,3 +277,8 @@ $(document).on('change', 'input', function(){
        }
     }
 });
+
+window.onload = function() {
+    var btn = document.getElementById("sendButton");
+    btn.onclick = sendTranslatedMessage;
+}
