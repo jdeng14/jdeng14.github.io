@@ -55,7 +55,7 @@ async function listMemories() {
     }
     let targetCode = nameToCode[targetString];
 
-    if (!source_to_target[sourceCode][targetCode]) {
+    if (!(sourceCode in source_to_target) || !source_to_target[sourceCode][targetCode]) {
         console.log("Unsupported Language Pairing");
         return;
     }
@@ -63,21 +63,51 @@ async function listMemories() {
     let apiInstance = new LiltNode.MemoriesApi();
     let memories = await apiInstance.getMemory();
 
+    let formString = "<form id='memoryForm'>";
+    let found = false;
+
     for (let index = 0; index < memories.length; index++) {
         if (memories[index].srclang === sourceCode && memories[index].trglang === targetCode) {
+            found = true;
             console.log(memories[index]);
+            // The ID of the memory as a string
+            let memoryId = memories[index].id.toString();
+            formString += "<input type='radio' id=" + memoryId + " name=memoryChoice" + " value=" + memoryId + ">"
+            formString += "<label for=" + memoryId + " class='memoryLabel'>" + memories[index].name + "</label><br>"
+        }
+    }
+    formString += "</form>"
+    document.getElementById("memoryFormDiv").innerHTML=formString;
+
+    if (!found) {
+        console.log("No Memory Found");
+    }
+}
+
+function storeMemoryChoice() {
+    let radios = document.getElementsByName('memoryChoice');
+    if (radios.length === 0) {
+        console.log("No Language Pair Selected");
+    }
+    for (let i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            let sourceString = document.getElementById('sourceChoice').value;
+            let sourceCode = nameToCode[sourceString];
+
+            let targetString = document.getElementById('targetChoice').value;
+            let targetCode = nameToCode[targetString];
+
+            localStorage.setItem(sourceCode + targetCode + "LiltMemory", radios[i].value);
+            document.getElementById("memoryFormDiv").innerHTML= sourceString + " to " + targetString + " set to Memory " + radios[i].value;
+            document.getElementById("sourceChoice").value="";
+            document.getElementById("targetChoice").value="";
             return;
         }
     }
-    console.log("No Memory Found");
+    console.log("No Memory Selected");
 }
 
 // Set search button to find memory
-window.onload = function() {
-    var btn = document.getElementById("languageSearch");
-    btn.onclick = listMemories;
-}
-
 window.onload = function() {
     try {
         let key = window.localStorage.getItem("LILTAPIKEY");
@@ -85,6 +115,7 @@ window.onload = function() {
         document.getElementById("APIKeySpan").innerHTML = key;
 
         document.getElementById("searchButton").onclick = listMemories;
+        document.getElementById("selectButton").onclick = storeMemoryChoice;
 
         document.getElementById("APIEdit").onclick = function () {
             location.href = "apikey.html";

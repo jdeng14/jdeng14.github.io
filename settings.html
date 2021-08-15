@@ -1,6 +1,7 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="settings.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script type="text/javascript" src="settings_bundle.js"></script>
     </head>
     <body>
@@ -24,8 +25,15 @@
             </p>
         </div>     
         <div class="container">
-            <div class="center">
-                <p id="memories" class="textBox"></p>
+            <div class="center" id="memoryFormDiv">
+                <form id="memoryForm">
+
+                  </form>
+            </div>
+        </div>
+        <div class="buttonContainer">
+            <div class="buttonCenter">
+                <button id="selectButton" class="button" >Select Memory for Language Pair</button>
             </div>
         </div>
     </body>

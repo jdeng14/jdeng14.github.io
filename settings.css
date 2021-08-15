@@ -108,7 +108,7 @@ p {
 }
 
 .container {
-    height: 600px;
+    height: 300px;
     position: relative;
     background-color: white;
     margin: 40;
@@ -121,7 +121,50 @@ p {
     /* top: 5%;
     left: 5%; */
     /* -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%); */
+    transform: translate
+    (-50%, -50%); */
+  }
+
+  .memoryForm {
+    font-size: 18px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+  }
+
+  .memoryLabel {
+    font-size: 18px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+  }
+
+  .button {
+    border: none;
+    color: rgb(7, 27, 90);
+    background-color: #85E8BA;
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 12px;
+    font-family: 'Flama', Arial, Helvetica, sans-serif;
+    height:100px;
+    width:300px;
+    margin:0;
+    display:block;
+  }
+  
+  .buttonCenter {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+  
+  .buttonContainer {
+    height: 150px;
+    position: relative;
   }
 
 body {

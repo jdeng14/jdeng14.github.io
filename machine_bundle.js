@@ -60,6 +60,7 @@ async function setMessageID(context) {
 }
 
 async function displayAllMessages(context, src, trg, memoryID) {
+    console.log(memoryID);
     const source = Front.buildCancelTokenSource();
     // Do not wait more than 500ms for the list of messages.
     setTimeout(() => source.cancel(), 500);
@@ -103,14 +104,18 @@ async function displayAllMessages(context, src, trg, memoryID) {
 }
 
 async function sendTranslatedMessage() {
+    console.log(memoryID);
     let originalMessage = document.getElementById("messageInput").value;
     if (originalMessage) {
         let messages_arr = originalMessage.split("\n")
         let option = document.getElementById('languageChoice').value;
-        if (option in memoriesDict) {
+        if (!(option in memoriesDict)) {
             console.log("No Option Selected");
-        } 
-        let translateInfo = memoriesDict[option];
+            return;
+        }
+        let reverseOptionArr = option.split(" to "); 
+        let reverseOption = reverseOptionArr[1] + " to " + reverseOptionArr[0];
+        let translateInfo = memoriesDict[reverseOption];
         let translatedMessages = await translateAllMessages(messages_arr, translateInfo[0], translateInfo[1], translateInfo[2]);
         let finalMessage = ""
         for (let index = 0; index < translatedMessages.length; index++) {
@@ -246,12 +251,21 @@ async function setLanguagePairs() {
         let src = dict[memory.srclang];
         let trg = dict[memory.trglang];
         languagePairs.add(src + " to " + trg);
-        memoriesDict[src + " to " + trg] = [memory.srclang, memory.trglang, memory.id];
+        let cached = window.localStorage.getItem(memory.srclang + memory.trglang + "LiltMemory");
+        if (cached !== null) {
+            memoriesDict[src + " to " + trg] = [memory.srclang, memory.trglang, cached];
+        } else {
+            memoriesDict[src + " to " + trg] = [memory.srclang, memory.trglang, memory.id];
+        }
     }
 
     let options = ""
     for (let pair of languagePairs) {
-        options += '<option value="' + pair + '" />';
+        let splitPair = pair.split(" to ");
+
+        if (languagePairs.has(splitPair[1] + " to " + splitPair[0])) {
+            options += '<option value="' + pair + '" />';
+        }
     }
 
     document.getElementById('languages').innerHTML = options;
@@ -277,6 +291,32 @@ $(document).on('change', 'input', function(){
        }
     }
 });
+
+window.addEventListener("keydown", function (event) {
+    if (event.defaultPrevented) {
+      return; // Do nothing if the event was already processed
+    }
+  
+    switch (event.key) {
+        case "r":
+            window.scrollTo(0, 0);;
+            break;
+        case "s":
+            window.scrollTo(0, document.body.scrollHeight);
+            break;
+        case "m":
+            window.location.href = "manual.html";;
+            break;
+        case "c":
+            window.location.href = "settings.html";;
+            break;
+        default:
+            return; // Quit when this doesn't handle the key event.
+    }
+  
+    // Cancel the default action to avoid it being handled twice
+    event.preventDefault();
+  }, true);
 
 window.onload = function() {
     var btn = document.getElementById("sendButton");
