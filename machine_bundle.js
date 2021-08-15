@@ -104,7 +104,6 @@ async function displayAllMessages(context, src, trg, memoryID) {
 }
 
 async function sendTranslatedMessage() {
-    console.log(memoryID);
     let originalMessage = document.getElementById("messageInput").value;
     if (originalMessage) {
         let messages_arr = originalMessage.split("\n")
@@ -116,6 +115,7 @@ async function sendTranslatedMessage() {
         let reverseOptionArr = option.split(" to "); 
         let reverseOption = reverseOptionArr[1] + " to " + reverseOptionArr[0];
         let translateInfo = memoriesDict[reverseOption];
+        console.log(translateInfo[2]);
         let translatedMessages = await translateAllMessages(messages_arr, translateInfo[0], translateInfo[1], translateInfo[2]);
         let finalMessage = ""
         for (let index = 0; index < translatedMessages.length; index++) {
@@ -298,16 +298,16 @@ window.addEventListener("keydown", function (event) {
     }
   
     switch (event.key) {
-        case "r":
+        case "r.ctrlKey":
             window.scrollTo(0, 0);;
             break;
-        case "s":
+        case "s.ctrlKey":
             window.scrollTo(0, document.body.scrollHeight);
             break;
-        case "m":
+        case "m.ctrlKey":
             window.location.href = "manual.html";;
             break;
-        case "c":
+        case "c.ctrlKey":
             window.location.href = "settings.html";;
             break;
         default:
