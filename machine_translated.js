@@ -295,22 +295,26 @@ window.addEventListener("keydown", function (event) {
     if (event.defaultPrevented) {
       return; // Do nothing if the event was already processed
     }
-  
-    switch (event.key) {
-        case "r.ctrlKey":
-            window.scrollTo(0, 0);;
-            break;
-        case "s.ctrlKey":
-            window.scrollTo(0, document.body.scrollHeight);
-            break;
-        case "m.ctrlKey":
-            window.location.href = "manual.html";;
-            break;
-        case "c.ctrlKey":
-            window.location.href = "settings.html";;
-            break;
-        default:
-            return; // Quit when this doesn't handle the key event.
+    if (event.metaKey) {
+        console.log("Control key hit");
+    }
+    if (event.metaKey || event.ctrlKey) {
+        switch (event.key) {
+            case "r":
+                window.scrollTo(0, 0);;
+                break;
+            case "s":
+                window.scrollTo(0, document.body.scrollHeight);
+                break;
+            case "m":
+                window.location.href = "manual.html";;
+                break;
+            case "c":
+                window.location.href = "settings.html";;
+                break;
+            default:
+                return; // Quit when this doesn't handle the key event.
+        }
     }
   
     // Cancel the default action to avoid it being handled twice
