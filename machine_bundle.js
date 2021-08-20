@@ -302,22 +302,27 @@ window.addEventListener("keydown", function (event) {
     if (event.metaKey || event.ctrlKey) {
         switch (event.key) {
             case "r":
-                window.scrollTo(0, 0);;
+                window.scrollTo(0, 0);
+                return true;
                 break;
             case "s":
                 window.scrollTo(0, document.body.scrollHeight);
+                return true;
                 break;
             case "m":
-                window.location.href = "manual.html";;
+                window.location.href = "manual.html";
+                return true;
                 break;
             case "c":
-                window.location.href = "settings.html";;
+                window.location.href = "settings.html";
+                return true;
                 break;
             default:
                 return; // Quit when this doesn't handle the key event.
         }
     }
-  
+    return false;
+
     // Cancel the default action to avoid it being handled twice
     event.preventDefault();
   }, true);
