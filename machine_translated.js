@@ -1,11 +1,14 @@
 "use strict";
 
-var Front = require('@frontapp/plugin-sdk');
-var LiltNode = require('lilt-node');
-const { connectableObservableDescriptor } = require('rxjs/internal/observable/ConnectableObservable');
+const Front = require('@frontapp/plugin-sdk');
+const LiltNode = require('lilt-node');
+const fetch = require('isomorphic-fetch');
 
+// Dictionary that maps string of format "src to trg" to array of [src, trg, memoryID]
 let memoriesDict = {};
+// Stores the current Front context
 let frontContext = undefined;
+// Stores the original message ID
 let originalMessageID = undefined;
 
 Front.contextUpdates.subscribe(context => {
@@ -114,7 +117,7 @@ async function sendTranslatedMessage() {
         let reverseOptionArr = option.split(" to "); 
         let reverseOption = reverseOptionArr[1] + " to " + reverseOptionArr[0];
         let translateInfo = memoriesDict[reverseOption];
-        console.log(translateInfo[2]);
+
         let translatedMessages = await translateAllMessages(messages_arr, translateInfo[0], translateInfo[1], translateInfo[2]);
         let finalMessage = ""
         for (let index = 0; index < translatedMessages.length; index++) {
@@ -143,6 +146,46 @@ async function sendTranslatedMessage() {
     } else {
         console.log("No message entered");
     }
+}
+
+async function sendVerifiedTranslatedMessage() {
+    let originalMessage = document.getElementById("messageInput").value;
+    if (originalMessage) {
+        let option = document.getElementById('languageChoice').value;
+        if (!(option in memoriesDict)) {
+            console.log("No Option Selected");
+            return;
+        }
+        let reverseOptionArr = option.split(" to "); 
+        let reverseOption = reverseOptionArr[1] + " to " + reverseOptionArr[0];
+        let translateInfo = memoriesDict[reverseOption];
+
+        console.log(frontContext.conversations);
+        console.log(frontContext.conversation)
+        const url = 'http://35.222.127.59:80/front/reply/' + frontContext.conversation;
+        let bodyParams = {
+            message: originalMessage,
+            memoryID: translateInfo[2],
+            LiltAPIKey: window.localStorage.getItem("LILTAPIKEY")
+        }
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(bodyParams),
+            headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
+        };
+
+        fetch(url, options)
+        .then(res => res.json())
+        .then(json => console.log(json))
+        .catch(err => console.error('error:' + err));
+    } else {
+        console.log("No message entered");
+    }
+}
+
+async function readVerifiedTranslatedMessage() {
+    // Todo
+    return;
 }
 
 async function getInstantTranslationTagID() {
@@ -327,6 +370,12 @@ window.addEventListener("keydown", function (event) {
   }, true);
 
 window.onload = function() {
-    var btn = document.getElementById("sendButton");
-    btn.onclick = sendTranslatedMessage;
+    var sendButton = document.getElementById("sendButton");
+    sendButton.onclick = sendTranslatedMessage;
+
+    var verifyReadButton = document.getElementById("verifyReadButton");
+    verifyReadButton.onclick = readVerifiedTranslatedMessage;
+
+    var verifySendButton = document.getElementById("verifySendButton");
+    verifySendButton.onclick = sendVerifiedTranslatedMessage;
 }

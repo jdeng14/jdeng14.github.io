@@ -1,9 +1,8 @@
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="read.css" />
-        <!-- <script type="text/javascript" src="//dl.frontapp.com/libs/plugin-sdk-1.0.1.min.js"></script> -->
-        <script type="text/javascript" src="read_bundle.js"></script>
+        <link rel="stylesheet" type="text/css" href="manual.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script type="text/javascript" src="manual_bundle.js"></script>
     </head>
     <body>
         <input type="button" class="backButton" onclick="location.href='index.html';" value="Back" />
@@ -11,39 +10,25 @@
             <img src="images/logo-white.svg" alt="Lilt">
         </div>
 
-        <p class="boxTitle">Translated Message:</p>
+        <p class="boxTitle">Enter Message:</p>
         <div class="languageSelector">
-            <label for="targetChoice" class="selectLabel">Select Target Language:</label>
-            <input list="targetLanguages" id="targetChoice" name="targetChoice" />
-            <datalist id="targetLanguages" style="overflow-y: auto!important">
-                <option value="English">
-                <option value="Spanish">
-                <option value="German">
-                <option value="French">
-                <option value="Russian">
-                <option value="English">
-                <option value="Spanish">
-                <option value="German">
-                <option value="French">
-                <option value="Russian">
-                <option value="English">
-                <option value="Spanish">
-                <option value="German">
-                <option value="French">
-                <option value="Russian">
+            <label for="targetChoice" class="selectLabel">Select Language Pairing:</label>
+            <input list="languages" id="languageChoice" name="languageChoice" class="languageChoice"/>
+            <datalist id="languages" style="overflow-y: auto!important">
             </datalist>
         </div>
     
-        <div class="container">
-            <div class="center">
-                <p id="translatedText" class="textBox"></p>
+        <div class="sendCenter">
+            <textarea id="messageInput" class="messageInput"></textarea>
+        </div>
+        <div class="buttonContainer">
+            <div class="buttonCenter">
+                <button id="preTranslateButton" class="button" >Pre-Translate Message</button>
             </div>
         </div>
-        <p class="boxTitle">Original Message:</p>
-        <div class="container">
-            <div class="center">
-                <p id="originalText" class="textBox"></p>
-            </div>
+        <p class="boxTitle">Translated Message:</p>
+        <div class="sendCenter">
+            <textarea id="messageOutput" class="messageInput"></textarea>
         </div>
     </body>
 </html>
