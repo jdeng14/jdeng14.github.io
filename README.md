@@ -5,3 +5,5 @@ Node Packages Installed
 3. require
 4. .env
 5. browserify
+6. isomorphic-fetch
+7. https

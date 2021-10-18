@@ -17,6 +17,7 @@ let frontContext = undefined;
 // Stores the original message ID
 let originalMessageID = undefined;
 
+// Get the most current Front context
 Front.contextUpdates.subscribe(context => {
     switch(context.type) {
       case 'noConversation':
@@ -26,6 +27,7 @@ Front.contextUpdates.subscribe(context => {
         console.log("Single Conversation");
         setMessageID(context);
         frontContext = context;
+        // Get user's language pair choice
         let option = document.getElementById('languageChoice').value;
         if (option in memoriesDict) {
             let translateInfo = memoriesDict[option];
@@ -40,6 +42,7 @@ Front.contextUpdates.subscribe(context => {
         break;
     }
   });
+
 
 async function setMessageID(context) {
     const source = Front.buildCancelTokenSource();
@@ -68,7 +71,6 @@ async function setMessageID(context) {
 }
 
 async function displayAllMessages(context, src, trg, memoryID) {
-    console.log(memoryID);
     const source = Front.buildCancelTokenSource();
     // Do not wait more than 500ms for the list of messages.
     setTimeout(() => source.cancel(), 500);
@@ -84,11 +86,7 @@ async function displayAllMessages(context, src, trg, memoryID) {
             messages.push(...results);
         }
 
-        let inner = "";
-        for (let index = 0; index < messages.length; index++) {
-            console.log(messages[index]);
-            inner = inner.concat(messages[index].content.body);
-        }
+        let inner = messages[messages.length - 1].content.body;
         let messages_arr = inner.split(/<[^>]*>/)
         let translatedMessages = await translateAllMessages(messages_arr, src, trg, memoryID);
         let tags = inner.match(/<[^>]*>/gi);
@@ -189,8 +187,47 @@ async function sendVerifiedTranslatedMessage() {
 }
 
 async function readVerifiedTranslatedMessage() {
-    // Todo
-    return;
+    try {
+        const list = await context.listMessages(undefined, source.token);
+
+        let nextPageToken = list.token
+        const messages = list.results;
+
+        while (nextPageToken) {
+            const {results, token} = await context.listMessages(nextPageToken);
+            nextPageToken = token;
+            messages.push(...results);
+        }
+
+        let originalMessage = messages[messages.length - 1].content.body;
+
+        let option = document.getElementById('languageChoice').value;
+        let translateInfo = memoriesDict[option];
+
+        const url = 'https://35.222.127.59:80/front/comment/' + frontContext.conversation.id;
+        let bodyParams = {
+            message: originalMessage,
+            memoryID: translateInfo[2],
+            LiltAPIKey: window.localStorage.getItem("LILTAPIKEY")
+        }
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(bodyParams),
+            headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
+            agent: httpsAgent,
+        };
+
+        fetch(url, options)
+        .then(res => res.json())
+        .then(json => console.log(json))
+        .catch(err => console.error('error:' + err));
+
+    } catch (error) {
+        if (Front.isCancelError(error)) {
+            return; // Do nothing.
+        }
+        throw error;
+    }
 }
 
 async function getInstantTranslationTagID() {
@@ -318,6 +355,10 @@ async function setLanguagePairs() {
     document.getElementById('languages').innerHTML = options;
 }
 
+function handleError(errorMessage) {
+    console.log(errorMessage);
+}
+
 setLanguagePairs();
 
 $(document).on('change', 'input', function(){
@@ -382,7 +423,31 @@ window.onload = function() {
     verifyReadButton.onclick = readVerifiedTranslatedMessage;
 
     var verifySendButton = document.getElementById("verifySendButton");
-    verifySendButton.onclick = sendVerifiedTranslatedMessage;
+    verifySendButton.onclick = testSend;
+}
+
+function testSend() {
+    const testhttpsAgent = new https.Agent({
+        rejectUnauthorized: false,
+      });
+
+    const url = 'https://35.222.127.59:80/front/reply/cnv_hhrsn1d';
+    let bodyParams = {
+        message: "Reply from server\nAfter the new line this is the message",
+        memoryID: 61123,
+        LiltAPIKey: "2b6d066afe38cf67ff04e0c0f6c2b674"
+    }
+    const options = {
+        method: 'POST',
+        body: JSON.stringify(bodyParams),
+        headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
+        agent: testhttpsAgent,
+    };
+
+    fetch(url, options)
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error('error:' + err));
 }
 },{"@frontapp/plugin-sdk":2,"https":302,"isomorphic-fetch":14,"lilt-node":27}],2:[function(require,module,exports){
 'use strict';
