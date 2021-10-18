@@ -3,6 +3,11 @@
 const Front = require('@frontapp/plugin-sdk');
 const LiltNode = require('lilt-node');
 const fetch = require('isomorphic-fetch');
+const https = require('https');
+
+const httpsAgent = new https.Agent({
+    rejectUnauthorized: false,
+  });
 
 // Dictionary that maps string of format "src to trg" to array of [src, trg, memoryID]
 let memoriesDict = {};
@@ -160,9 +165,7 @@ async function sendVerifiedTranslatedMessage() {
         let reverseOption = reverseOptionArr[1] + " to " + reverseOptionArr[0];
         let translateInfo = memoriesDict[reverseOption];
 
-        console.log(frontContext.conversations);
-        console.log(frontContext.conversation)
-        const url = 'http://35.222.127.59:80/front/reply/' + frontContext.conversation;
+        const url = 'https://35.222.127.59:80/front/reply/' + frontContext.conversation.id;
         let bodyParams = {
             message: originalMessage,
             memoryID: translateInfo[2],
@@ -171,7 +174,8 @@ async function sendVerifiedTranslatedMessage() {
         const options = {
             method: 'POST',
             body: JSON.stringify(bodyParams),
-            headers: {Accept: 'application/json', 'Content-Type': 'application/json'}
+            headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
+            agent: httpsAgent,
         };
 
         fetch(url, options)
