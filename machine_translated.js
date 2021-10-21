@@ -107,11 +107,12 @@ async function displayAllMessages(context, src, trg, memoryID) {
         let translatedMessages = await translateAllMessages(messages_arr, src, trg, memoryID);
         let tags = inner.match(/<[^>]*>/gi);
         let translatedInner = translatedMessages[0];
-
-        for (let index = 0; index < tags.length; index++) {
-            translatedInner = translatedInner.concat(tags[index]);
-            translatedInner = translatedInner.concat(translatedMessages[index + 1]);
-            translatedInner = translatedInner.concat(" ");
+        if (tags) {
+            for (let index = 0; index < tags.length; index++) {
+                translatedInner = translatedInner.concat(tags[index]);
+                translatedInner = translatedInner.concat(translatedMessages[index + 1]);
+                translatedInner = translatedInner.concat(" ");
+            }
         }
         document.getElementById("translatedText").innerHTML = translatedInner;
 
